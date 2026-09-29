@@ -1,0 +1,6 @@
+{
+  "name": "WasteMatch Thailand",
+  "description": "Circular marketplace platform connecting surplus goods, industrial materials, and equipment through mutual matching and trusted transactions.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

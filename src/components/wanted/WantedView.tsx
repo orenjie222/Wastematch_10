@@ -1,0 +1,455 @@
+import React, { useState } from 'react';
+import { useMarketplace } from '../../context/MarketplaceContext';
+import { WantedItem, ListingCategory, CATEGORY_DEFINITIONS } from '../../types/marketplace';
+import { THAI_PROVINCES } from '../../data/thaiProvinces';
+import { UnitSelector } from '../common/UnitSelector';
+import { 
+  Search, 
+  Plus, 
+  MapPin, 
+  Calendar, 
+  Sparkles, 
+  ArrowRight, 
+  Filter, 
+  CheckCircle2, 
+  X, 
+  Coins,
+  Navigation,
+  Compass
+} from 'lucide-react';
+
+export const WantedView: React.FC = () => {
+  const { 
+    wantedItems, 
+    createWantedItem, 
+    setActiveTab, 
+    currentUser 
+  } = useMarketplace();
+
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [selectedProvince, setSelectedProvince] = useState<string>('all');
+  const [filterDistanceKm, setFilterDistanceKm] = useState<number>(0);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // New Wanted Form State
+  const [newTitle, setNewTitle] = useState('');
+  const [newCategory, setNewCategory] = useState<ListingCategory>('furniture_home');
+  const [newQuantity, setNewQuantity] = useState(1);
+  const [newUnit, setNewUnit] = useState('ชิ้น');
+  const [newBudget, setNewBudget] = useState<number>(0);
+  const [newDistrict, setNewDistrict] = useState(currentUser.location.district);
+  const [newProvince, setNewProvince] = useState(currentUser.location.province || 'กรุงเทพมหานคร');
+  const [newMaxDistanceKm, setNewMaxDistanceKm] = useState<number>(30);
+  const [newCoverageArea, setNewCoverageArea] = useState<string>('');
+  const [newDescription, setNewDescription] = useState('');
+
+  const filteredItems = wantedItems.filter(item => {
+    if (selectedCategory !== 'all' && item.category !== selectedCategory) return false;
+    if (selectedProvince !== 'all' && item.location.province !== selectedProvince) return false;
+    if (filterDistanceKm > 0 && item.location.maxDistanceKm && item.location.maxDistanceKm > filterDistanceKm) return false;
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase();
+      const matchTitle = item.title.toLowerCase().includes(q);
+      const matchDesc = item.description.toLowerCase().includes(q);
+      const matchDist = item.location.district.toLowerCase().includes(q);
+      const matchProv = item.location.province.toLowerCase().includes(q);
+      const matchUnit = item.unit.toLowerCase().includes(q);
+      if (!matchTitle && !matchDesc && !matchDist && !matchProv && !matchUnit) return false;
+    }
+    return true;
+  });
+
+  const handleCreateSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newTitle.trim()) return;
+
+    createWantedItem({
+      title: newTitle,
+      category: newCategory,
+      quantity: Number(newQuantity),
+      unit: newUnit,
+      budget: Number(newBudget),
+      location: {
+        district: newDistrict || 'เมือง',
+        province: newProvince,
+        maxDistanceKm: newMaxDistanceKm,
+        coverageArea: newCoverageArea.trim() || (newMaxDistanceKm === 0 ? 'ยินดีรับของจากทั่วประเทศ' : `สะดวกรับของภายในรัศมี ${newMaxDistanceKm} กม.`)
+      },
+      description: newDescription
+    });
+
+    setIsModalOpen(false);
+    setNewTitle('');
+    setNewDescription('');
+    setNewBudget(0);
+    setNewCoverageArea('');
+  };
+
+  return (
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8">
+      
+      {/* Header Bar */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-[#1C211F]/10 mb-6">
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight text-[#1C211F] font-display flex items-center gap-2">
+            <span>กระดานประกาศตามหา (Wanted Items)</span>
+            <span className="text-xs font-normal text-[#164C3A] bg-[#DCE9E2] px-2 py-0.5 rounded font-sans">
+              {wantedItems.length} รายการ
+            </span>
+          </h1>
+          <p className="text-xs text-[#1C211F]/60 mt-0.5">
+            ลงประกาศสิ่งของที่คุณกำลังต้องการ เพื่อให้ผู้ที่มีของแมตช์ส่งต่อให้คุณโดยตรงทั่วประเทศไทย
+          </p>
+        </div>
+
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="px-4 py-2.5 bg-[#164C3A] text-white text-xs font-semibold rounded-xl hover:bg-[#123e2f] transition-all flex items-center gap-1.5 shadow-sm cursor-pointer whitespace-nowrap"
+          >
+            <Plus className="w-4 h-4" />
+            <span>สร้างประกาศตามหา</span>
+          </button>
+        </div>
+      </div>
+
+      {/* Filter & Search Bar */}
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6">
+        <div className="relative w-full sm:w-80">
+          <input
+            type="text"
+            placeholder="ค้นหาประกาศตามหา..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full pl-3.5 pr-8 py-2 bg-white text-xs text-[#1C211F] border border-[#1C211F]/15 rounded-xl focus:outline-none focus:ring-1 focus:ring-[#164C3A]"
+          />
+        </div>
+
+        <div className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
+          {/* Distance Filter */}
+          <div className="w-full sm:w-48">
+            <select
+              value={filterDistanceKm}
+              onChange={(e) => setFilterDistanceKm(Number(e.target.value))}
+              className="w-full px-3 py-2 bg-white text-xs text-[#1C211F] border border-[#1C211F]/15 rounded-xl focus:outline-none focus:border-[#164C3A]"
+            >
+              <option value="0">ทุกระยะทาง (ทั่วไทย)</option>
+              <option value="5">รัศมีรับ ≤ 5 กม.</option>
+              <option value="15">รัศมีรับ ≤ 15 กม.</option>
+              <option value="30">รัศมีรับ ≤ 30 กม.</option>
+              <option value="50">รัศมีรับ ≤ 50 กม.</option>
+              <option value="100">รัศมีรับ ≤ 100 กม.</option>
+            </select>
+          </div>
+
+          {/* Province Filter */}
+          <div className="w-full sm:w-56">
+            <select
+              value={selectedProvince}
+              onChange={(e) => setSelectedProvince(e.target.value)}
+              className="w-full px-3 py-2 bg-white text-xs text-[#1C211F] border border-[#1C211F]/15 rounded-xl focus:outline-none focus:border-[#164C3A]"
+            >
+              <option value="all">ทุกจังหวัดทั่วไทย</option>
+              {THAI_PROVINCES.map(p => (
+                <option key={p.nameTh} value={p.nameTh}>
+                  {p.nameTh}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+      </div>
+
+      {/* Grid of Wanted Cards */}
+      {filteredItems.length > 0 ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredItems.map(item => (
+            <div
+              key={item.id}
+              className="bg-white rounded-2xl border border-[#1C211F]/10 p-5 flex flex-col justify-between hover:border-[#164C3A]/40 transition-all shadow-sm group"
+            >
+              <div className="space-y-3">
+                {/* Header metadata */}
+                <div className="flex items-center justify-between text-xs text-[#1C211F]/60">
+                  <span className="font-semibold text-[#164C3A] uppercase tracking-wider">
+                    {item.category}
+                  </span>
+                  <div className="flex items-center gap-1 text-[11px]">
+                    <Calendar className="w-3 h-3 text-[#1C211F]/40" />
+                    <span>หมดอายุ {item.expirationDate}</span>
+                  </div>
+                </div>
+
+                {/* Title */}
+                <h3 className="text-base font-bold text-[#1C211F] group-hover:text-[#164C3A] transition-colors leading-snug">
+                  {item.title}
+                </h3>
+
+                {/* Description */}
+                <p className="text-xs text-[#1C211F]/70 line-clamp-3 leading-relaxed">
+                  {item.description}
+                </p>
+
+                {/* Budget & Quantity Specs */}
+                <div className="grid grid-cols-2 gap-2 p-3 bg-[#F7F5EF] rounded-xl text-xs">
+                  <div>
+                    <span className="text-[#1C211F]/50 block text-[10px]">จำนวนที่ต้องการ</span>
+                    <span className="font-semibold text-[#1C211F]">
+                      {item.quantity} {item.unit}
+                    </span>
+                  </div>
+                  <div>
+                    <span className="text-[#1C211F]/50 block text-[10px]">งบประมาณที่ตั้งไว้</span>
+                    <span className="font-semibold text-[#164C3A] tabular-nums">
+                      {item.budget > 0 ? `฿${item.budget.toLocaleString()}` : 'ขอรับบริจาค / ส่งต่อฟรี'}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Location & Distance Radius */}
+                <div className="flex items-center justify-between text-xs text-[#1C211F]/70 pt-1">
+                  <span className="flex items-center gap-1.5 truncate">
+                    <MapPin className="w-3.5 h-3.5 text-[#164C3A] shrink-0" />
+                    <span className="truncate">{item.location.province} ({item.location.district})</span>
+                  </span>
+                  <span className="flex items-center gap-1 font-semibold text-[#164C3A] bg-[#DCE9E2] px-2 py-0.5 rounded text-[11px] shrink-0">
+                    <Navigation className="w-3 h-3" />
+                    <span>{item.location.maxDistanceKm ? `สะดวกรับ ≤ ${item.location.maxDistanceKm} กม.` : 'ทั่วประเทศ'}</span>
+                  </span>
+                </div>
+              </div>
+
+              {/* Bottom Card Footer */}
+              <div className="pt-4 mt-4 border-t border-[#1C211F]/10 flex items-center justify-between">
+                <div className="flex items-center gap-1.5 text-xs text-[#164C3A] font-semibold">
+                  <Sparkles className="w-3.5 h-3.5" />
+                  <span>มี {item.matchingListingsCount} รายการที่ตรงกัน</span>
+                </div>
+
+                <button
+                  onClick={() => setActiveTab('discover')}
+                  className="px-3.5 py-1.5 text-xs font-semibold text-white bg-[#164C3A] rounded-lg hover:bg-[#123e2f] transition-all flex items-center gap-1 cursor-pointer"
+                >
+                  <span>ดู Matches</span>
+                  <ArrowRight className="w-3 h-3" />
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className="p-12 bg-white rounded-2xl border border-[#1C211F]/10 text-center space-y-3">
+          <h3 className="text-base font-semibold text-[#1C211F]">ยังไม่มีประกาศตามหาในเงื่อนไขนี้</h3>
+          <p className="text-xs text-[#1C211F]/60">คุณสามารถเป็นคนแรกที่สร้างประกาศตามหาสิ่งของที่คุณต้องการได้ทันที</p>
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="px-4 py-2 bg-[#164C3A] text-white text-xs font-semibold rounded-lg hover:bg-[#123e2f] cursor-pointer"
+          >
+            สร้างประกาศตามหาใหม่
+          </button>
+        </div>
+      )}
+
+      {/* Create Wanted Item Modal */}
+      {isModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#1C211F]/70 backdrop-blur-sm animate-in fade-in duration-150">
+          <div className="w-full max-w-lg bg-white rounded-2xl border border-[#1C211F]/15 shadow-2xl overflow-hidden animate-in zoom-in-95 duration-150">
+            <div className="px-6 py-4 bg-[#164C3A] text-white flex items-center justify-between">
+              <h3 className="text-sm font-semibold">สร้างประกาศตามหาสิ่งของ (Create Wanted)</h3>
+              <button 
+                onClick={() => setIsModalOpen(false)}
+                className="text-white/80 hover:text-white p-1 cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <form onSubmit={handleCreateSubmit} className="p-6 space-y-4">
+              <div>
+                <label className="text-xs font-semibold text-[#1C211F] block mb-1">
+                  หัวข้อสิ่งที่ต้องการตามหา *
+                </label>
+                <input
+                  type="text"
+                  required
+                  placeholder="เช่น ตามหาเก้าอี้สำนักงานสภาพดี 2 ตัว, พาเลทไม้เก่า 50 ตัว"
+                  value={newTitle}
+                  onChange={(e) => setNewTitle(e.target.value)}
+                  className="w-full px-3 py-2 text-xs border border-[#1C211F]/15 rounded-xl focus:outline-none focus:ring-1 focus:ring-[#164C3A]"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="text-xs font-semibold text-[#1C211F] block mb-1">
+                    หมวดหมู่
+                  </label>
+                  <select
+                    value={newCategory}
+                    onChange={(e) => setNewCategory(e.target.value as ListingCategory)}
+                    className="w-full px-3 py-2 text-xs border border-[#1C211F]/15 rounded-xl bg-white focus:outline-none focus:ring-1 focus:ring-[#164C3A]"
+                  >
+                    {CATEGORY_DEFINITIONS.map(c => (
+                      <option key={c.id} value={c.id}>
+                        {c.nameTh}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="text-xs font-semibold text-[#1C211F] block mb-1">
+                    งบประมาณที่ตั้งไว้ (บาท)
+                  </label>
+                  <input
+                    type="number"
+                    min="0"
+                    placeholder="ใส่ 0 หากเป็นขอรับบริจาค"
+                    value={newBudget}
+                    onChange={(e) => setNewBudget(Number(e.target.value))}
+                    className="w-full px-3 py-2 text-xs border border-[#1C211F]/15 rounded-xl focus:outline-none focus:ring-1 focus:ring-[#164C3A]"
+                  />
+                </div>
+              </div>
+
+              {/* Quantity and Unit with rich UnitSelector */}
+              <div className="space-y-2">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="text-xs font-semibold text-[#1C211F] block mb-1">
+                      จำนวนที่ต้องการ *
+                    </label>
+                    <input
+                      type="number"
+                      min="1"
+                      value={newQuantity}
+                      onChange={(e) => setNewQuantity(Number(e.target.value))}
+                      className="w-full px-3 py-2 text-xs border border-[#1C211F]/15 rounded-xl focus:outline-none focus:ring-1 focus:ring-[#164C3A]"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-xs font-semibold text-[#1C211F] block mb-1">
+                      หน่วยนับ (หลากหลายประเภท) *
+                    </label>
+                    <UnitSelector
+                      value={newUnit}
+                      onChange={(u) => setNewUnit(u)}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Province and District */}
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="text-xs font-semibold text-[#1C211F] block mb-1">
+                    จังหวัดที่ต้องการรับของ *
+                  </label>
+                  <select
+                    value={newProvince}
+                    onChange={(e) => setNewProvince(e.target.value)}
+                    className="w-full px-3 py-2 text-xs border border-[#1C211F]/15 rounded-xl bg-white focus:outline-none focus:border-[#164C3A]"
+                  >
+                    {THAI_PROVINCES.map(p => (
+                      <option key={p.nameTh} value={p.nameTh}>
+                        {p.nameTh}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="text-xs font-semibold text-[#1C211F] block mb-1">
+                    อำเภอ/เขต หรือพื้นที่นัดรับ *
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="เช่น คลองเตย, เมืองระยอง"
+                    value={newDistrict}
+                    onChange={(e) => setNewDistrict(e.target.value)}
+                    className="w-full px-3 py-2 text-xs border border-[#1C211F]/15 rounded-xl focus:outline-none focus:ring-1 focus:ring-[#164C3A]"
+                  />
+                </div>
+              </div>
+
+              {/* Distance Radius & Area Coverage */}
+              <div className="p-3 bg-[#F7F5EF] rounded-xl border border-[#1C211F]/10 space-y-2.5">
+                <div className="flex items-center justify-between">
+                  <label className="text-xs font-bold text-[#1C211F] flex items-center gap-1.5">
+                    <Navigation className="w-3.5 h-3.5 text-[#164C3A]" />
+                    <span>รัศมีระยะทางที่ยินดีเดินทางไปรับของ</span>
+                  </label>
+                  <span className="text-[11px] font-bold text-[#164C3A] bg-white px-2 py-0.5 rounded border border-[#1C211F]/10">
+                    {newMaxDistanceKm === 0 ? 'ทั่วประเทศ' : `ไม่เกิน ${newMaxDistanceKm} กม.`}
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-3 sm:grid-cols-6 gap-1">
+                  {[
+                    { km: 5, label: '5 กม.' },
+                    { km: 15, label: '15 กม.' },
+                    { km: 30, label: '30 กม.' },
+                    { km: 50, label: '50 กม.' },
+                    { km: 100, label: '100 กม.' },
+                    { km: 0, label: 'ทั่วไทย' }
+                  ].map(p => (
+                    <button
+                      key={p.km}
+                      type="button"
+                      onClick={() => setNewMaxDistanceKm(p.km)}
+                      className={`py-1 text-xs rounded-lg border font-medium cursor-pointer ${
+                        newMaxDistanceKm === p.km
+                          ? 'bg-[#164C3A] text-white border-[#164C3A]'
+                          : 'bg-white text-[#1C211F]/70 border-[#1C211F]/10 hover:border-[#164C3A]'
+                      }`}
+                    >
+                      {p.label}
+                    </button>
+                  ))}
+                </div>
+
+                <input
+                  type="text"
+                  placeholder="เงื่อนไขพื้นที่ เช่น ยินดีไปรับถึงที่ หรือ สะดวกรับตามแนวรถไฟฟ้า"
+                  value={newCoverageArea}
+                  onChange={(e) => setNewCoverageArea(e.target.value)}
+                  className="w-full px-3 py-1.5 text-xs bg-white border border-[#1C211F]/15 rounded-lg focus:outline-none focus:border-[#164C3A]"
+                />
+              </div>
+
+              <div>
+                <label className="text-xs font-semibold text-[#1C211F] block mb-1">
+                  รายละเอียดเพิ่มเติมและเงื่อนไข
+                </label>
+                <textarea
+                  rows={3}
+                  placeholder="อธิบายสภาพที่รับได้ วัตถุประสงค์การนำไปใช้งาน หรือเงื่อนไขการขนย้าย..."
+                  value={newDescription}
+                  onChange={(e) => setNewDescription(e.target.value)}
+                  className="w-full px-3 py-2 text-xs border border-[#1C211F]/15 rounded-xl focus:outline-none focus:ring-1 focus:ring-[#164C3A]"
+                />
+              </div>
+
+              <div className="pt-2 flex justify-end gap-2">
+                <button
+                  type="button"
+                  onClick={() => setIsModalOpen(false)}
+                  className="px-4 py-2 text-xs font-medium text-[#1C211F]/70 hover:bg-[#F7F5EF] rounded-xl cursor-pointer"
+                >
+                  ยกเลิก
+                </button>
+                <button
+                  type="submit"
+                  className="px-5 py-2 bg-[#164C3A] text-white text-xs font-semibold rounded-xl hover:bg-[#123e2f] transition-all cursor-pointer shadow-sm"
+                >
+                  บันทึกประกาศตามหา
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+    </div>
+  );
+};
