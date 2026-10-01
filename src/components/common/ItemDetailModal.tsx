@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useMarketplace } from '../../context/MarketplaceContext';
+import { getCategoryDefaultImage } from '../../data/seedData';
 import { 
   X, 
   MapPin, 
@@ -105,9 +106,12 @@ export const ItemDetailModal: React.FC = () => {
           <div className="space-y-3">
             <div className="aspect-16/10 rounded-2xl overflow-hidden bg-[#F7F5EF] border border-[#1C211F]/10">
               <img
-                src={selectedListing.images[activeImageIndex] || selectedListing.images[0]}
+                src={selectedListing.images[activeImageIndex] || selectedListing.images[0] || getCategoryDefaultImage(selectedListing.category)}
                 alt={selectedListing.title}
                 referrerPolicy="no-referrer"
+                onError={(e) => {
+                  e.currentTarget.src = getCategoryDefaultImage(selectedListing.category);
+                }}
                 className="w-full h-full object-cover"
               />
             </div>
@@ -122,7 +126,15 @@ export const ItemDetailModal: React.FC = () => {
                       activeImageIndex === idx ? 'border-[#164C3A]' : 'border-transparent opacity-60 hover:opacity-100'
                     }`}
                   >
-                    <img src={img} alt="thumbnail" referrerPolicy="no-referrer" className="w-full h-full object-cover" />
+                    <img 
+                      src={img} 
+                      alt="thumbnail" 
+                      referrerPolicy="no-referrer" 
+                      onError={(e) => {
+                        e.currentTarget.src = getCategoryDefaultImage(selectedListing.category);
+                      }}
+                      className="w-full h-full object-cover" 
+                    />
                   </button>
                 ))}
               </div>
@@ -303,6 +315,9 @@ export const ItemDetailModal: React.FC = () => {
                 src={selectedListing.seller.avatar}
                 alt={selectedListing.seller.name}
                 referrerPolicy="no-referrer"
+                onError={(e) => {
+                  e.currentTarget.src = 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80';
+                }}
                 className="w-12 h-12 rounded-full object-cover ring-2 ring-[#164C3A]/20"
               />
               <div>

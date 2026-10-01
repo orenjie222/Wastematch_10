@@ -17,6 +17,7 @@ import {
   Clock
 } from 'lucide-react';
 import { OfferData } from '../../types/marketplace';
+import { getCategoryDefaultImage } from '../../data/seedData';
 
 export const ChatView: React.FC = () => {
   const { 
@@ -129,6 +130,9 @@ export const ChatView: React.FC = () => {
                   src={conv.otherUser.avatar}
                   alt={conv.otherUser.name}
                   referrerPolicy="no-referrer"
+                  onError={(e) => {
+                    e.currentTarget.src = 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80';
+                  }}
                   className="w-10 h-10 rounded-full object-cover shrink-0 ring-1 ring-[#1C211F]/10"
                 />
                 <div className="flex-1 min-w-0">
@@ -165,6 +169,9 @@ export const ChatView: React.FC = () => {
                   src={selectedConversation.otherUser.avatar}
                   alt={selectedConversation.otherUser.name}
                   referrerPolicy="no-referrer"
+                  onError={(e) => {
+                    e.currentTarget.src = 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80';
+                  }}
                   className="w-8 h-8 rounded-full object-cover"
                 />
                 <div>
@@ -350,9 +357,12 @@ export const ChatView: React.FC = () => {
             {/* Item Card */}
             <div className="p-3.5 bg-white rounded-xl border border-[#1C211F]/10 space-y-2">
               <img
-                src={selectedConversation.listing.images[0]}
+                src={selectedConversation.listing.images[0] || getCategoryDefaultImage(selectedConversation.listing.category)}
                 alt={selectedConversation.listing.title}
                 referrerPolicy="no-referrer"
+                onError={(e) => {
+                  e.currentTarget.src = getCategoryDefaultImage(selectedConversation.listing.category);
+                }}
                 className="w-full h-28 object-cover rounded-lg"
               />
               <div>

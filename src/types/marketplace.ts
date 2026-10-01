@@ -178,6 +178,7 @@ export interface WantedItem {
   quantity: number;
   unit: string;
   budget: number;
+  images?: string[];
   location: {
     district: string;
     province: string;

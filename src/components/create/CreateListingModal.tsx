@@ -17,7 +17,19 @@ import {
   BIOMASS_IMAGE,
   PLASTIC_IMAGE,
   METAL_IMAGE,
-  HERO_IMAGE 
+  BOXES_IMAGE,
+  TEXTILE_IMAGE,
+  BOOKS_IMAGE,
+  BICYCLE_IMAGE,
+  KITCHEN_IMAGE,
+  CLOTHES_IMAGE,
+  GLASS_BOTTLES_IMAGE,
+  ORGANIC_COMPOST_IMAGE,
+  PALLET_WOOD_IMAGE,
+  ELECTRONICS_IMAGE,
+  GARDEN_IMAGE,
+  HERO_IMAGE,
+  getCategoryDefaultImage
 } from '../../data/seedData';
 import { 
   X, 
@@ -258,7 +270,11 @@ export const CreateListingModal: React.FC = () => {
                 </label>
                 <select
                   value={category}
-                  onChange={(e) => setCategory(e.target.value as ListingCategory)}
+                  onChange={(e) => {
+                    const newCat = e.target.value as ListingCategory;
+                    setCategory(newCat);
+                    setSelectedImage(getCategoryDefaultImage(newCat));
+                  }}
                   className="w-full px-3.5 py-2.5 bg-white border border-[#1C211F]/20 rounded-xl text-xs sm:text-sm text-[#1C211F] focus:outline-none focus:border-[#164C3A]"
                 >
                   {CATEGORY_DEFINITIONS.map(c => (
@@ -309,12 +325,18 @@ export const CreateListingModal: React.FC = () => {
 
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                 {[
-                  { img: CHAIR_IMAGE, label: 'เก้าอี้สำนักงานจริง' },
-                  { img: WOOD_IMAGE, label: 'ไม้สักทองจริง' },
-                  { img: ESPRESSO_IMAGE, label: 'เครื่องชงกาแฟจริง' },
-                  { img: BIOMASS_IMAGE, label: 'ชีวมวล/ฟางเกษตรจริง' },
-                  { img: PLASTIC_IMAGE, label: 'เกล็ดพลาสติกรีไซเคิลจริง' },
-                  { img: METAL_IMAGE, label: 'เศษอลูมิเนียม/โลหะจริง' },
+                  { img: getCategoryDefaultImage(category), label: 'รูปตามหมวดหมู่ (' + category + ')' },
+                  { img: CHAIR_IMAGE, label: 'เก้าอี้สำนักงาน' },
+                  { img: WOOD_IMAGE, label: 'ไม้สัก/ไม้แปรรูป' },
+                  { img: KITCHEN_IMAGE, label: 'เครื่องครัวสเตนเลส' },
+                  { img: BOOKS_IMAGE, label: 'หนังสือ/สื่อการเรียน' },
+                  { img: BICYCLE_IMAGE, label: 'จักรยาน/กีฬา' },
+                  { img: CLOTHES_IMAGE, label: 'เสื้อผ้า/แฟชั่น' },
+                  { img: GLASS_BOTTLES_IMAGE, label: 'ขวดแก้ว/บรรจุภัณฑ์' },
+                  { img: ORGANIC_COMPOST_IMAGE, label: 'ปุ๋ยอินทรีย์/กากกาแฟ' },
+                  { img: PALLET_WOOD_IMAGE, label: 'พาเลทไม้' },
+                  { img: ELECTRONICS_IMAGE, label: 'อุปกรณ์อิเล็กทรอนิกส์' },
+                  { img: GARDEN_IMAGE, label: 'ต้นไม้/กระถางสวน' },
                 ].map((item, idx) => (
                   <div
                     key={idx}
@@ -323,7 +345,15 @@ export const CreateListingModal: React.FC = () => {
                       selectedImage === item.img ? 'border-[#164C3A] ring-2 ring-[#164C3A]/20' : 'border-[#1C211F]/15 opacity-70 hover:opacity-100'
                     }`}
                   >
-                    <img src={item.img} alt={item.label} referrerPolicy="no-referrer" className="w-full h-full object-cover" />
+                    <img 
+                      src={item.img} 
+                      alt={item.label} 
+                      referrerPolicy="no-referrer" 
+                      onError={(e) => {
+                        e.currentTarget.src = getCategoryDefaultImage(category);
+                      }}
+                      className="w-full h-full object-cover" 
+                    />
                     <span className="absolute bottom-1 left-1 right-1 text-[10px] text-white bg-black/70 px-1 py-0.5 rounded truncate">
                       {item.label}
                     </span>
@@ -336,14 +366,27 @@ export const CreateListingModal: React.FC = () => {
                 ))}
               </div>
 
-              <div className="p-4 border-2 border-dashed border-[#1C211F]/20 rounded-xl text-center space-y-2 bg-[#F7F5EF]/60">
-                <Upload className="w-6 h-6 text-[#164C3A] mx-auto" />
-                <p className="text-xs font-semibold text-[#1C211F]">
-                  อัปโหลดรูปภาพสินค้าจริงเพิ่มเติมจากกล้องหรืออุปกรณ์
-                </p>
-                <p className="text-[10px] text-[#1C211F]/50">
-                  รองรับ JPG, PNG สูงสุด 5 รูป (เน้นถ่ายทุกมุมและจุดตำหนิอย่างชัดเจน)
-                </p>
+              {/* Direct Image URL input */}
+              <div className="p-3 bg-[#F7F5EF] rounded-xl border border-[#1C211F]/10 space-y-2">
+                <label className="text-xs font-semibold text-[#1C211F] block">
+                  หรือระบุลิงก์รูปภาพโดยตรง (Direct Image URL)
+                </label>
+                <div className="flex gap-2">
+                  <input
+                    type="url"
+                    placeholder="วางลิงก์รูปภาพ https://images.unsplash.com/..."
+                    value={selectedImage}
+                    onChange={(e) => setSelectedImage(e.target.value)}
+                    className="flex-1 px-3 py-1.5 text-xs bg-white border border-[#1C211F]/15 rounded-lg focus:outline-none focus:border-[#164C3A]"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setSelectedImage(getCategoryDefaultImage(category))}
+                    className="px-3 py-1.5 bg-white border border-[#1C211F]/20 text-[11px] font-medium rounded-lg hover:bg-gray-50 cursor-pointer"
+                  >
+                    รีเซ็ตเป็นรูปหมวดหมู่
+                  </button>
+                </div>
               </div>
             </div>
           )}

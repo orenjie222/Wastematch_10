@@ -4,7 +4,8 @@ import {
   HERO_IMAGE, 
   CHAIR_IMAGE, 
   WOOD_IMAGE, 
-  ESPRESSO_IMAGE 
+  ESPRESSO_IMAGE,
+  FALLBACK_IMAGE
 } from '../../data/seedData';
 import { 
   ArrowRight, 
@@ -49,9 +50,9 @@ export const LandingPage: React.FC = () => {
             {/* Left Column: Headlines & Call to Actions */}
             <div className="lg:col-span-6 space-y-6">
               
-              <div className="inline-flex items-center gap-2 text-xs font-semibold text-[#164C3A] tracking-wider uppercase">
+              <div className="inline-flex items-center gap-2 text-xs font-semibold text-[#164C3A] tracking-wider uppercase bg-[#DCE9E2] px-3 py-1 rounded-full">
                 <span className="w-2 h-2 rounded-full bg-[#164C3A]" />
-                ระบบจับคู่หมุนเวียนสิ่งของและวัสดุเหลือใช้แห่งแรกของไทย
+                WasteMatch · Circular Economy Platform
               </div>
 
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-[#1C211F] leading-[1.15] font-display text-balance">
@@ -104,6 +105,9 @@ export const LandingPage: React.FC = () => {
                   src={HERO_IMAGE}
                   alt="Curated circular items showcase"
                   referrerPolicy="no-referrer"
+                  onError={(e) => {
+                    e.currentTarget.src = FALLBACK_IMAGE;
+                  }}
                   className="w-full h-72 sm:h-96 object-cover"
                 />
                 

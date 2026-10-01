@@ -3,6 +3,7 @@ import { useMarketplace } from '../../context/MarketplaceContext';
 import { WantedItem, ListingCategory, CATEGORY_DEFINITIONS } from '../../types/marketplace';
 import { THAI_PROVINCES } from '../../data/thaiProvinces';
 import { UnitSelector } from '../common/UnitSelector';
+import { getCategoryDefaultImage } from '../../data/seedData';
 import { 
   Search, 
   Plus, 
@@ -15,7 +16,8 @@ import {
   X, 
   Coins,
   Navigation,
-  Compass
+  Compass,
+  ImageIcon
 } from 'lucide-react';
 
 export const WantedView: React.FC = () => {
@@ -43,6 +45,7 @@ export const WantedView: React.FC = () => {
   const [newMaxDistanceKm, setNewMaxDistanceKm] = useState<number>(30);
   const [newCoverageArea, setNewCoverageArea] = useState<string>('');
   const [newDescription, setNewDescription] = useState('');
+  const [newImageUrl, setNewImageUrl] = useState('');
 
   const filteredItems = wantedItems.filter(item => {
     if (selectedCategory !== 'all' && item.category !== selectedCategory) return false;
@@ -70,6 +73,7 @@ export const WantedView: React.FC = () => {
       quantity: Number(newQuantity),
       unit: newUnit,
       budget: Number(newBudget),
+      images: newImageUrl.trim() ? [newImageUrl.trim()] : [getCategoryDefaultImage(newCategory)],
       location: {
         district: newDistrict || 'เมือง',
         province: newProvince,
@@ -84,6 +88,7 @@ export const WantedView: React.FC = () => {
     setNewDescription('');
     setNewBudget(0);
     setNewCoverageArea('');
+    setNewImageUrl('');
   };
 
   return (
@@ -164,79 +169,129 @@ export const WantedView: React.FC = () => {
       {/* Grid of Wanted Cards */}
       {filteredItems.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredItems.map(item => (
-            <div
-              key={item.id}
-              className="bg-white rounded-2xl border border-[#1C211F]/10 p-5 flex flex-col justify-between hover:border-[#164C3A]/40 transition-all shadow-sm group"
-            >
-              <div className="space-y-3">
-                {/* Header metadata */}
-                <div className="flex items-center justify-between text-xs text-[#1C211F]/60">
-                  <span className="font-semibold text-[#164C3A] uppercase tracking-wider">
-                    {item.category}
-                  </span>
-                  <div className="flex items-center gap-1 text-[11px]">
-                    <Calendar className="w-3 h-3 text-[#1C211F]/40" />
-                    <span>หมดอายุ {item.expirationDate}</span>
+          {filteredItems.map(item => {
+            const categoryMeta = CATEGORY_DEFINITIONS.find(c => c.id === item.category);
+            const categoryName = categoryMeta?.nameTh || item.category;
+            const itemImage = (item.images && item.images[0]) || getCategoryDefaultImage(item.category);
+
+            return (
+              <div
+                key={item.id}
+                className="bg-white rounded-2xl border border-[#1C211F]/10 overflow-hidden hover:border-[#164C3A]/40 transition-all shadow-sm hover:shadow-md group flex flex-col justify-between"
+              >
+                <div>
+                  {/* Photo Header Container */}
+                  <div className="relative aspect-16/10 bg-[#F7F5EF] overflow-hidden">
+                    <img
+                      src={itemImage}
+                      alt={item.title}
+                      referrerPolicy="no-referrer"
+                      onError={(e) => {
+                        e.currentTarget.src = getCategoryDefaultImage(item.category);
+                      }}
+                      className="w-full h-full object-cover group-hover:scale-103 transition-transform duration-300"
+                    />
+
+                    {/* Top Left Badges */}
+                    <div className="absolute top-2.5 left-2.5 flex items-center gap-1.5">
+                      <span className="text-[10px] font-bold px-2 py-0.5 rounded shadow-xs bg-[#164C3A] text-white uppercase tracking-wider">
+                        ตามหา (Wanted)
+                      </span>
+                      <span className="text-[10px] font-medium px-2 py-0.5 rounded bg-white/95 text-[#1C211F] shadow-xs backdrop-blur-xs">
+                        {categoryName}
+                      </span>
+                    </div>
+
+                    {/* Top Right Budget Tag */}
+                    <div className="absolute top-2.5 right-2.5">
+                      <span className="text-[11px] font-bold px-2.5 py-1 rounded-lg bg-white/95 text-[#164C3A] shadow-xs backdrop-blur-xs">
+                        {item.budget > 0 ? `งบ ฿${item.budget.toLocaleString()}` : 'ขอรับฟรี/แลกเปลี่ยน'}
+                      </span>
+                    </div>
+
+                    {/* Bottom overlay with location */}
+                    <div className="absolute bottom-2.5 left-2.5 right-2.5 flex items-center justify-between text-[11px] font-medium text-white px-2.5 py-1 rounded-md bg-[#1C211F]/75 backdrop-blur-xs">
+                      <span className="flex items-center gap-1 truncate max-w-[65%]">
+                        <MapPin className="w-3 h-3 text-emerald-400 shrink-0" />
+                        <span className="truncate">{item.location.province} ({item.location.district})</span>
+                      </span>
+                      <span className="flex items-center gap-1 font-bold text-emerald-300 shrink-0">
+                        <Navigation className="w-3 h-3" />
+                        <span>{item.location.maxDistanceKm ? `≤ ${item.location.maxDistanceKm} กม.` : 'ทั่วไทย'}</span>
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Body Content */}
+                  <div className="p-4 space-y-3">
+                    {/* User and expiration info */}
+                    <div className="flex items-center justify-between text-xs text-[#1C211F]/60">
+                      <div className="flex items-center gap-1.5">
+                        <img
+                          src={item.user.avatar}
+                          alt={item.user.name}
+                          referrerPolicy="no-referrer"
+                          onError={(e) => {
+                            e.currentTarget.src = 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80';
+                          }}
+                          className="w-5 h-5 rounded-full object-cover ring-1 ring-[#1C211F]/10"
+                        />
+                        <span className="font-medium text-[#1C211F] truncate max-w-[120px]">{item.user.name}</span>
+                      </div>
+                      <div className="flex items-center gap-1 text-[11px]">
+                        <Calendar className="w-3 h-3 text-[#1C211F]/40" />
+                        <span>หมดอายุ {item.expirationDate}</span>
+                      </div>
+                    </div>
+
+                    {/* Title */}
+                    <h3 className="text-base font-bold text-[#1C211F] group-hover:text-[#164C3A] transition-colors leading-snug line-clamp-2">
+                      {item.title}
+                    </h3>
+
+                    {/* Description */}
+                    <p className="text-xs text-[#1C211F]/70 line-clamp-2 leading-relaxed">
+                      {item.description}
+                    </p>
+
+                    {/* Specs Box */}
+                    <div className="grid grid-cols-2 gap-2 p-2.5 bg-[#F7F5EF] rounded-xl text-xs">
+                      <div>
+                        <span className="text-[#1C211F]/50 block text-[10px]">จำนวนที่ต้องการ</span>
+                        <span className="font-semibold text-[#1C211F]">
+                          {item.quantity.toLocaleString()} {item.unit}
+                        </span>
+                      </div>
+                      <div>
+                        <span className="text-[#1C211F]/50 block text-[10px]">พื้นที่ครอบคลุม</span>
+                        <span className="font-semibold text-[#164C3A] truncate block text-[11px]" title={item.location.coverageArea || 'รับของได้ทั่วไป'}>
+                          {item.location.coverageArea || 'รับของได้ทั่วไป'}
+                        </span>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
-                {/* Title */}
-                <h3 className="text-base font-bold text-[#1C211F] group-hover:text-[#164C3A] transition-colors leading-snug">
-                  {item.title}
-                </h3>
+                {/* Bottom Card Footer */}
+                <div className="p-4 pt-0">
+                  <div className="pt-3 border-t border-[#1C211F]/10 flex items-center justify-between">
+                    <div className="flex items-center gap-1.5 text-xs text-[#164C3A] font-semibold">
+                      <Sparkles className="w-3.5 h-3.5" />
+                      <span>มี {item.matchingListingsCount} รายการตรงกัน</span>
+                    </div>
 
-                {/* Description */}
-                <p className="text-xs text-[#1C211F]/70 line-clamp-3 leading-relaxed">
-                  {item.description}
-                </p>
-
-                {/* Budget & Quantity Specs */}
-                <div className="grid grid-cols-2 gap-2 p-3 bg-[#F7F5EF] rounded-xl text-xs">
-                  <div>
-                    <span className="text-[#1C211F]/50 block text-[10px]">จำนวนที่ต้องการ</span>
-                    <span className="font-semibold text-[#1C211F]">
-                      {item.quantity} {item.unit}
-                    </span>
+                    <button
+                      onClick={() => setActiveTab('discover')}
+                      className="px-3.5 py-1.5 text-xs font-semibold text-white bg-[#164C3A] rounded-lg hover:bg-[#123e2f] transition-all flex items-center gap-1 cursor-pointer"
+                    >
+                      <span>ดู Matches</span>
+                      <ArrowRight className="w-3 h-3" />
+                    </button>
                   </div>
-                  <div>
-                    <span className="text-[#1C211F]/50 block text-[10px]">งบประมาณที่ตั้งไว้</span>
-                    <span className="font-semibold text-[#164C3A] tabular-nums">
-                      {item.budget > 0 ? `฿${item.budget.toLocaleString()}` : 'ขอรับบริจาค / ส่งต่อฟรี'}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Location & Distance Radius */}
-                <div className="flex items-center justify-between text-xs text-[#1C211F]/70 pt-1">
-                  <span className="flex items-center gap-1.5 truncate">
-                    <MapPin className="w-3.5 h-3.5 text-[#164C3A] shrink-0" />
-                    <span className="truncate">{item.location.province} ({item.location.district})</span>
-                  </span>
-                  <span className="flex items-center gap-1 font-semibold text-[#164C3A] bg-[#DCE9E2] px-2 py-0.5 rounded text-[11px] shrink-0">
-                    <Navigation className="w-3 h-3" />
-                    <span>{item.location.maxDistanceKm ? `สะดวกรับ ≤ ${item.location.maxDistanceKm} กม.` : 'ทั่วประเทศ'}</span>
-                  </span>
                 </div>
               </div>
-
-              {/* Bottom Card Footer */}
-              <div className="pt-4 mt-4 border-t border-[#1C211F]/10 flex items-center justify-between">
-                <div className="flex items-center gap-1.5 text-xs text-[#164C3A] font-semibold">
-                  <Sparkles className="w-3.5 h-3.5" />
-                  <span>มี {item.matchingListingsCount} รายการที่ตรงกัน</span>
-                </div>
-
-                <button
-                  onClick={() => setActiveTab('discover')}
-                  className="px-3.5 py-1.5 text-xs font-semibold text-white bg-[#164C3A] rounded-lg hover:bg-[#123e2f] transition-all flex items-center gap-1 cursor-pointer"
-                >
-                  <span>ดู Matches</span>
-                  <ArrowRight className="w-3 h-3" />
-                </button>
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       ) : (
         <div className="p-12 bg-white rounded-2xl border border-[#1C211F]/10 text-center space-y-3">
@@ -415,6 +470,36 @@ export const WantedView: React.FC = () => {
                   onChange={(e) => setNewCoverageArea(e.target.value)}
                   className="w-full px-3 py-1.5 text-xs bg-white border border-[#1C211F]/15 rounded-lg focus:outline-none focus:border-[#164C3A]"
                 />
+              </div>
+
+              {/* Reference Image or Category Photo */}
+              <div className="space-y-1.5">
+                <label className="text-xs font-semibold text-[#1C211F] flex items-center justify-between">
+                  <span className="flex items-center gap-1.5">
+                    <ImageIcon className="w-3.5 h-3.5 text-[#164C3A]" />
+                    <span>รูปภาพตัวอย่างสิ่งที่ตามหา (ใส่ URL หรือใช้รูปหมวดหมู่อัตโนมัติ)</span>
+                  </span>
+                  <span className="text-[10px] text-[#164C3A] font-normal">รูปหมวดหมู่อัตโนมัติ</span>
+                </label>
+                <div className="flex gap-3 items-center">
+                  <div className="w-14 h-14 rounded-xl overflow-hidden bg-[#F7F5EF] border border-[#1C211F]/10 shrink-0">
+                    <img
+                      src={newImageUrl.trim() || getCategoryDefaultImage(newCategory)}
+                      alt="Preview"
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        e.currentTarget.src = getCategoryDefaultImage(newCategory);
+                      }}
+                    />
+                  </div>
+                  <input
+                    type="url"
+                    placeholder="วางลิงก์รูปภาพ (หรือเว้นว่างเพื่อใช้ภาพตามหมวดหมู่อัตโนมัติ)"
+                    value={newImageUrl}
+                    onChange={(e) => setNewImageUrl(e.target.value)}
+                    className="flex-1 px-3 py-2 text-xs border border-[#1C211F]/15 rounded-xl focus:outline-none focus:ring-1 focus:ring-[#164C3A]"
+                  />
+                </div>
               </div>
 
               <div>

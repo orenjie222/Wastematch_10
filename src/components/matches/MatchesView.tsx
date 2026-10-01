@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useMarketplace } from '../../context/MarketplaceContext';
 import { MatchRecord } from '../../types/marketplace';
+import { getCategoryDefaultImage } from '../../data/seedData';
 import { 
   Sparkles, 
   MessageSquare, 
@@ -108,9 +109,12 @@ export const MatchesView: React.FC = () => {
                   {/* Listing Info Box */}
                   <div className="flex gap-4 p-3.5 rounded-xl bg-[#F7F5EF] border border-[#1C211F]/10">
                     <img
-                      src={m.listing.images[0]}
+                      src={m.listing.images[0] || getCategoryDefaultImage(m.listing.category)}
                       alt={m.listing.title}
                       referrerPolicy="no-referrer"
+                      onError={(e) => {
+                        e.currentTarget.src = getCategoryDefaultImage(m.listing.category);
+                      }}
                       className="w-16 h-16 rounded-lg object-cover ring-1 ring-[#1C211F]/10 shrink-0"
                     />
                     <div className="flex-1 min-w-0">
@@ -143,6 +147,9 @@ export const MatchesView: React.FC = () => {
                         src={otherParty.avatar}
                         alt={otherParty.name}
                         referrerPolicy="no-referrer"
+                        onError={(e) => {
+                          e.currentTarget.src = 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80';
+                        }}
                         className="w-8 h-8 rounded-full object-cover ring-1 ring-[#1C211F]/10"
                       />
                       <div>

@@ -26,7 +26,8 @@ import {
   INITIAL_DEALS,
   INITIAL_REVIEWS,
   INITIAL_NOTIFICATIONS,
-  INITIAL_REPORTS
+  INITIAL_REPORTS,
+  getCategoryDefaultImage
 } from '../data/seedData';
 import { calculateCommission } from '../utils/commission';
 
@@ -130,8 +131,8 @@ interface MarketplaceContextType {
 
 const MarketplaceContext = createContext<MarketplaceContextType | undefined>(undefined);
 
-const STORAGE_KEY = 'wastematch_app_state_v2';
-const AUTH_KEY = 'wastematch_auth_state_v2';
+const STORAGE_KEY = 'wastematch_app_state_v3';
+const AUTH_KEY = 'wastematch_auth_state_v3';
 
 export const MarketplaceProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [currentUser, setCurrentUser] = useState<User>(SEED_USERS[0]);
@@ -183,7 +184,14 @@ export const MarketplaceProvider: React.FC<{ children: React.ReactNode }> = ({ c
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
         const parsed = JSON.parse(saved);
-        if (parsed.listings) setListings(parsed.listings);
+        if (parsed.listings && Array.isArray(parsed.listings)) {
+          const userCreated = parsed.listings.filter((l: Listing) => !INITIAL_LISTINGS.some(init => init.id === l.id));
+          setListings([...userCreated, ...INITIAL_LISTINGS]);
+        }
+        if (parsed.wantedItems && Array.isArray(parsed.wantedItems)) {
+          const userCreatedWanted = parsed.wantedItems.filter((w: WantedItem) => !INITIAL_WANTED.some(init => init.id === w.id));
+          setWantedItems([...userCreatedWanted, ...INITIAL_WANTED]);
+        }
         if (parsed.matches) setMatches(parsed.matches);
         if (parsed.conversations) setConversations(parsed.conversations);
         if (parsed.deals) setDeals(parsed.deals);
@@ -200,6 +208,7 @@ export const MarketplaceProvider: React.FC<{ children: React.ReactNode }> = ({ c
     try {
       const state = {
         listings,
+        wantedItems,
         matches,
         conversations,
         deals,
@@ -210,7 +219,7 @@ export const MarketplaceProvider: React.FC<{ children: React.ReactNode }> = ({ c
     } catch {
       // ignore
     }
-  }, [listings, matches, conversations, deals, savedListingIds, swipedListingIds]);
+  }, [listings, wantedItems, matches, conversations, deals, savedListingIds, swipedListingIds]);
 
   const login = (email: string) => {
     const matchedUser = allUsers.find(u => u.email.toLowerCase() === email.toLowerCase());
@@ -428,7 +437,7 @@ export const MarketplaceProvider: React.FC<{ children: React.ReactNode }> = ({ c
       conditionLabel: data.conditionLabel || `สภาพ ${data.conditionPercentage || 85}%`,
       quantity: data.quantity || 1,
       unit: data.unit || 'ชิ้น',
-      images: data.images && data.images.length > 0 ? data.images : [INITIAL_LISTINGS[0].images[0]],
+      images: data.images && data.images.length > 0 ? data.images : [getCategoryDefaultImage(data.category)],
       location: data.location || {
         district: currentUser.location.district,
         province: currentUser.location.province,
@@ -476,6 +485,7 @@ export const MarketplaceProvider: React.FC<{ children: React.ReactNode }> = ({ c
       quantity: data.quantity || 1,
       unit: data.unit || 'ชิ้น',
       budget: data.budget || 0,
+      images: data.images && data.images.length > 0 ? data.images : [getCategoryDefaultImage(data.category)],
       location: data.location || {
         district: currentUser.location.district,
         province: currentUser.location.province

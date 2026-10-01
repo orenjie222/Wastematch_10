@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useMarketplace } from '../../context/MarketplaceContext';
 import { Listing, ListingCategory, TransactionType, CATEGORY_DEFINITIONS } from '../../types/marketplace';
 import { THAI_PROVINCES } from '../../data/thaiProvinces';
+import { getCategoryDefaultImage, FALLBACK_IMAGE } from '../../data/seedData';
 import { 
   X, 
   Bookmark, 
@@ -695,9 +696,12 @@ export const DiscoverView: React.FC = () => {
                           onClick={() => setSelectedListing(item)}
                         >
                           <img
-                            src={item.images[0]}
+                            src={item.images[0] || getCategoryDefaultImage(item.category)}
                             alt={item.title}
                             referrerPolicy="no-referrer"
+                            onError={(e) => {
+                              e.currentTarget.src = getCategoryDefaultImage(item.category);
+                            }}
                             className="w-full h-full object-cover group-hover:scale-103 transition-transform duration-300"
                           />
 
@@ -804,6 +808,9 @@ export const DiscoverView: React.FC = () => {
                                 src={item.seller.avatar}
                                 alt={item.seller.name}
                                 referrerPolicy="no-referrer"
+                                onError={(e) => {
+                                  e.currentTarget.src = 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80';
+                                }}
                                 className="w-6 h-6 rounded-full object-cover ring-1 ring-[#1C211F]/10"
                               />
                               <div className="text-right">
@@ -881,9 +888,12 @@ export const DiscoverView: React.FC = () => {
                       onClick={() => setSelectedListing(currentItem)}
                     >
                       <img
-                        src={currentItem.images[0]}
+                        src={currentItem.images[0] || getCategoryDefaultImage(currentItem.category)}
                         alt={currentItem.title}
                         referrerPolicy="no-referrer"
+                        onError={(e) => {
+                          e.currentTarget.src = getCategoryDefaultImage(currentItem.category);
+                        }}
                         className="w-full h-full object-cover"
                       />
 
