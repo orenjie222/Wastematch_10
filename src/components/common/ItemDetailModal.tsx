@@ -20,7 +20,8 @@ import {
   Coins,
   Receipt,
   Navigation,
-  Compass
+  Compass,
+  Edit3
 } from 'lucide-react';
 
 export const ItemDetailModal: React.FC = () => {
@@ -36,7 +37,9 @@ export const ItemDetailModal: React.FC = () => {
     setActiveTab, 
     setReportModalTarget, 
     currentUser,
-    setViewingSeller
+    setViewingSeller,
+    openImageEditor,
+    updateListingImage
   } = useMarketplace();
 
   const [activeImageIndex, setActiveImageIndex] = useState(0);
@@ -104,7 +107,7 @@ export const ItemDetailModal: React.FC = () => {
           
           {/* 1. Large Image Gallery */}
           <div className="space-y-3">
-            <div className="aspect-16/10 rounded-2xl overflow-hidden bg-[#F7F5EF] border border-[#1C211F]/10">
+            <div className="relative aspect-16/10 rounded-2xl overflow-hidden bg-[#F7F5EF] border border-[#1C211F]/10 group">
               <img
                 src={selectedListing.images[activeImageIndex] || selectedListing.images[0] || getCategoryDefaultImage(selectedListing.category)}
                 alt={selectedListing.title}
@@ -114,6 +117,20 @@ export const ItemDetailModal: React.FC = () => {
                 }}
                 className="w-full h-full object-cover"
               />
+
+              {/* Quick Image Customizer Button */}
+              <button
+                type="button"
+                onClick={() => openImageEditor({
+                  title: `แก้ไข/เปลี่ยนรูปภาพ: ${selectedListing.title}`,
+                  currentImage: selectedListing.images[0] || getCategoryDefaultImage(selectedListing.category),
+                  onSave: (newUrl) => updateListingImage(selectedListing.id, newUrl)
+                })}
+                className="absolute bottom-3 right-3 px-3 py-1.5 bg-[#252722]/85 hover:bg-[#344634] text-white rounded-lg text-xs font-semibold flex items-center gap-1.5 shadow-md backdrop-blur-xs transition-all cursor-pointer z-10"
+              >
+                <Edit3 className="w-3.5 h-3.5" />
+                <span>เปลี่ยนรูปภาพสินค้านี้</span>
+              </button>
             </div>
 
             {selectedListing.images.length > 1 && (

@@ -319,51 +319,108 @@ export const CreateListingModal: React.FC = () => {
               <div>
                 <h4 className="text-base font-bold text-[#1C211F]">รูปภาพสินค้าจริง (Authentic Photos)</h4>
                 <p className="text-xs text-[#1C211F]/60 mt-1">
-                  WasteMatch บังคับใช้รูปภาพสินค้าจริงเท่านั้น ห้ามใช้ภาพกราฟิกหรือภาพโมเดล 3D เพื่อความโปร่งใส
+                  WasteMatch สนับสนุนรูปภาพสินค้าจริงเพื่อความโปร่งใส คุณสามารถอัปโหลดไฟล์ภาพจากมือถือ/คอมพิวเตอร์ หรือเลือกจากหมวดหมู่ได้
                 </p>
               </div>
 
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                {[
-                  { img: getCategoryDefaultImage(category), label: 'รูปตามหมวดหมู่ (' + category + ')' },
-                  { img: CHAIR_IMAGE, label: 'เก้าอี้สำนักงาน' },
-                  { img: WOOD_IMAGE, label: 'ไม้สัก/ไม้แปรรูป' },
-                  { img: KITCHEN_IMAGE, label: 'เครื่องครัวสเตนเลส' },
-                  { img: BOOKS_IMAGE, label: 'หนังสือ/สื่อการเรียน' },
-                  { img: BICYCLE_IMAGE, label: 'จักรยาน/กีฬา' },
-                  { img: CLOTHES_IMAGE, label: 'เสื้อผ้า/แฟชั่น' },
-                  { img: GLASS_BOTTLES_IMAGE, label: 'ขวดแก้ว/บรรจุภัณฑ์' },
-                  { img: ORGANIC_COMPOST_IMAGE, label: 'ปุ๋ยอินทรีย์/กากกาแฟ' },
-                  { img: PALLET_WOOD_IMAGE, label: 'พาเลทไม้' },
-                  { img: ELECTRONICS_IMAGE, label: 'อุปกรณ์อิเล็กทรอนิกส์' },
-                  { img: GARDEN_IMAGE, label: 'ต้นไม้/กระถางสวน' },
-                ].map((item, idx) => (
-                  <div
-                    key={idx}
-                    onClick={() => setSelectedImage(item.img)}
-                    className={`relative aspect-4/3 rounded-xl overflow-hidden border-2 cursor-pointer transition-all ${
-                      selectedImage === item.img ? 'border-[#164C3A] ring-2 ring-[#164C3A]/20' : 'border-[#1C211F]/15 opacity-70 hover:opacity-100'
-                    }`}
-                  >
-                    <img 
-                      src={item.img} 
-                      alt={item.label} 
-                      referrerPolicy="no-referrer" 
-                      onError={(e) => {
-                        e.currentTarget.src = getCategoryDefaultImage(category);
-                      }}
-                      className="w-full h-full object-cover" 
-                    />
-                    <span className="absolute bottom-1 left-1 right-1 text-[10px] text-white bg-black/70 px-1 py-0.5 rounded truncate">
-                      {item.label}
-                    </span>
-                    {selectedImage === item.img && (
-                      <div className="absolute top-1.5 right-1.5 bg-[#164C3A] text-white rounded-full p-0.5">
-                        <Check className="w-3 h-3" />
-                      </div>
-                    )}
+              {/* Upload file from device */}
+              <div className="p-4 bg-white rounded-xl border-2 border-dashed border-[#B8AA96]/60 hover:border-[#344634] text-center transition-all">
+                <input
+                  type="file"
+                  id="listing-file-input"
+                  accept="image/png, image/jpeg, image/webp"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      const reader = new FileReader();
+                      reader.onload = (event) => {
+                        if (event.target?.result) {
+                          setSelectedImage(event.target.result as string);
+                        }
+                      };
+                      reader.readAsDataURL(file);
+                    }
+                  }}
+                  className="hidden"
+                />
+                <label
+                  htmlFor="listing-file-input"
+                  className="cursor-pointer flex flex-col items-center justify-center gap-1.5"
+                >
+                  <div className="w-10 h-10 rounded-full bg-[#EEEAE1] text-[#344634] flex items-center justify-center">
+                    <Upload className="w-5 h-5" />
                   </div>
-                ))}
+                  <span className="text-xs font-bold text-[#344634]">กดเพื่ออัปโหลดรูปภาพจากอุปกรณ์ / ถ่ายรูป</span>
+                  <span className="text-[10px] text-[#252722]/60">รองรับไฟล์ JPG, PNG, WEBP ขนาดไม่เกิน 5MB</span>
+                </label>
+              </div>
+
+              {/* Active Preview */}
+              {selectedImage && (
+                <div className="p-3 bg-[#F7F5EF] rounded-xl border border-[#1C211F]/10 flex items-center gap-3">
+                  <div className="w-16 h-16 rounded-lg overflow-hidden bg-white shrink-0 border border-[#1C211F]/10">
+                    <img
+                      src={selectedImage}
+                      alt="Selected preview"
+                      referrerPolicy="no-referrer"
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <span className="text-xs font-bold text-[#1C211F] block truncate">รูปภาพปัจจุบันที่เลือก</span>
+                    <span className="text-[10px] text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded font-medium inline-block mt-0.5">
+                      พร้อมใช้งานในประกาศ
+                    </span>
+                  </div>
+                </div>
+              )}
+
+              <div className="pt-2">
+                <label className="text-xs font-bold text-[#1C211F] block mb-2">
+                  หรือเลือกจากคลังภาพตัวอย่างสินค้า:
+                </label>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                  {[
+                    { img: getCategoryDefaultImage(category), label: 'รูปตามหมวดหมู่ (' + category + ')' },
+                    { img: CHAIR_IMAGE, label: 'เก้าอี้สำนักงาน' },
+                    { img: WOOD_IMAGE, label: 'ไม้สัก/ไม้แปรรูป' },
+                    { img: KITCHEN_IMAGE, label: 'เครื่องครัวสเตนเลส' },
+                    { img: BOOKS_IMAGE, label: 'หนังสือ/สื่อการเรียน' },
+                    { img: BICYCLE_IMAGE, label: 'จักรยาน/กีฬา' },
+                    { img: CLOTHES_IMAGE, label: 'เสื้อผ้า/แฟชั่น' },
+                    { img: GLASS_BOTTLES_IMAGE, label: 'ขวดแก้ว/บรรจุภัณฑ์' },
+                    { img: ORGANIC_COMPOST_IMAGE, label: 'ปุ๋ยอินทรีย์/กากกาแฟ' },
+                    { img: PALLET_WOOD_IMAGE, label: 'พาเลทไม้' },
+                    { img: ELECTRONICS_IMAGE, label: 'อุปกรณ์อิเล็กทรอนิกส์' },
+                    { img: GARDEN_IMAGE, label: 'ต้นไม้/กระถางสวน' },
+                  ].map((item, idx) => (
+                    <div
+                      key={idx}
+                      onClick={() => setSelectedImage(item.img)}
+                      className={`relative aspect-4/3 rounded-xl overflow-hidden border-2 cursor-pointer transition-all ${
+                        selectedImage === item.img ? 'border-[#164C3A] ring-2 ring-[#164C3A]/20 shadow-xs' : 'border-[#1C211F]/15 opacity-70 hover:opacity-100'
+                      }`}
+                    >
+                      <img 
+                        src={item.img} 
+                        alt={item.label} 
+                        referrerPolicy="no-referrer" 
+                        onError={(e) => {
+                          e.currentTarget.src = getCategoryDefaultImage(category);
+                        }}
+                        className="w-full h-full object-cover" 
+                      />
+                      <span className="absolute bottom-1 left-1 right-1 text-[10px] text-white bg-black/70 px-1 py-0.5 rounded truncate">
+                        {item.label}
+                      </span>
+                      {selectedImage === item.img && (
+                        <div className="absolute top-1.5 right-1.5 bg-[#164C3A] text-white rounded-full p-0.5">
+                          <Check className="w-3 h-3" />
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
               </div>
 
               {/* Direct Image URL input */}

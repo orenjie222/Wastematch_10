@@ -34,32 +34,50 @@ export const PALLET_WOOD_IMAGE = 'https://images.unsplash.com/photo-153377785788
 export const BABY_IMAGE = 'https://images.unsplash.com/photo-1515488042361-ee00e0ddd4e4?auto=format&fit=crop&w=800&q=80';
 export const AUTO_IMAGE = 'https://images.unsplash.com/photo-1486006920555-c77dce18193b?auto=format&fit=crop&w=800&q=80';
 export const RECYCLE_GENERAL_IMAGE = 'https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?auto=format&fit=crop&w=800&q=80';
+
+// Additional specific category and affordable product photos
+export const SCHOOL_MATERIALS_IMAGE = 'https://images.unsplash.com/photo-1456735190829-80ab37ddec09?auto=format&fit=crop&w=800&q=80';
+export const HOBBY_COLLECTIBLES_IMAGE = 'https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=800&q=80';
+export const OFFICE_SUPPLIES_IMAGE = 'https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&w=800&q=80';
+export const PAPER_CARDBOARD_IMAGE = 'https://images.unsplash.com/photo-1607344645866-009c320c5ab8?auto=format&fit=crop&w=800&q=80';
+export const INDUSTRIAL_MATS_IMAGE = 'https://images.unsplash.com/photo-1504917599217-d4dc5ebe6122?auto=format&fit=crop&w=800&q=80';
+export const KIDS_TOYS_IMAGE = 'https://images.unsplash.com/photo-1596461404969-9ae70f2830c1?auto=format&fit=crop&w=800&q=80';
+export const STROLLER_IMAGE = 'https://images.unsplash.com/photo-1591088398332-8a7791972843?auto=format&fit=crop&w=800&q=80';
+export const TABLE_IMAGE = 'https://images.unsplash.com/photo-1530018607912-eff2daa1bac4?auto=format&fit=crop&w=800&q=80';
+export const KEYBOARD_IMAGE = 'https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&w=800&q=80';
+export const YOGA_IMAGE = 'https://images.unsplash.com/photo-1601925260368-ae2f83cf8b7f?auto=format&fit=crop&w=800&q=80';
+export const VINYL_RECORD_IMAGE = 'https://images.unsplash.com/photo-1539185441755-769473a23570?auto=format&fit=crop&w=800&q=80';
+export const HELMET_IMAGE = 'https://images.unsplash.com/photo-1558981403-c5f9899a28bc?auto=format&fit=crop&w=800&q=80';
+export const CERAMIC_DISHES_IMAGE = 'https://images.unsplash.com/photo-1517256064527-09c73fc73e38?auto=format&fit=crop&w=800&q=80';
+export const INDOOR_PLANTS_IMAGE = 'https://images.unsplash.com/photo-1485955900006-10f4d324d411?auto=format&fit=crop&w=800&q=80';
+export const KIDS_CLOTHES_IMAGE = 'https://images.unsplash.com/photo-1519689680058-324335c77eba?auto=format&fit=crop&w=800&q=80';
+export const PLASTIC_BOXES_IMAGE = 'https://images.unsplash.com/photo-1591195853828-11db59a44f6b?auto=format&fit=crop&w=800&q=80';
 export const FALLBACK_IMAGE = 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=800&q=80';
 
 export const CATEGORY_DEFAULT_IMAGES: Record<ListingCategory, string> = {
   furniture_home: CHAIR_IMAGE,
   clothing_fashion: CLOTHES_IMAGE,
-  electronics: ELECTRONICS_IMAGE,
-  household_items: KITCHEN_IMAGE,
+  electronics: KEYBOARD_IMAGE,
+  household_items: CERAMIC_DISHES_IMAGE,
   books_stationery: BOOKS_IMAGE,
-  used_school_materials: BOOKS_IMAGE,
-  baby_kids: BABY_IMAGE,
-  sports_outdoor: BICYCLE_IMAGE,
-  hobbies_collectibles: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=800&q=80',
-  automotive: AUTO_IMAGE,
-  plants_gardening: GARDEN_IMAGE,
-  business_office: ESPRESSO_IMAGE,
+  used_school_materials: SCHOOL_MATERIALS_IMAGE,
+  baby_kids: KIDS_TOYS_IMAGE,
+  sports_outdoor: YOGA_IMAGE,
+  hobbies_collectibles: VINYL_RECORD_IMAGE,
+  automotive: HELMET_IMAGE,
+  plants_gardening: INDOOR_PLANTS_IMAGE,
+  business_office: OFFICE_SUPPLIES_IMAGE,
   agricultural_waste: BIOMASS_IMAGE,
   agricultural_materials: ORGANIC_COMPOST_IMAGE,
   packaging_materials: BOXES_IMAGE,
-  paper_cardboard: 'https://images.unsplash.com/photo-1607344645866-009c320c5ab8?auto=format&fit=crop&w=800&q=80',
-  plastic: PLASTIC_IMAGE,
+  paper_cardboard: PAPER_CARDBOARD_IMAGE,
+  plastic: PLASTIC_BOXES_IMAGE,
   glass: GLASS_BOTTLES_IMAGE,
-  wood: WOOD_IMAGE,
+  wood: PALLET_WOOD_IMAGE,
   fabric_textile: TEXTILE_IMAGE,
   iron_metal: METAL_IMAGE,
   recyclable_materials: RECYCLE_GENERAL_IMAGE,
-  industrial_materials: 'https://images.unsplash.com/photo-1504917599217-d4dc5ebe6122?auto=format&fit=crop&w=800&q=80',
+  industrial_materials: INDUSTRIAL_MATS_IMAGE,
   construction_materials: CONSTRUCTION_IMAGE
 };
 
@@ -1197,6 +1215,456 @@ export const INITIAL_LISTINGS: Listing[] = [
     interestedCount: 14,
     createdAt: '2026-09-14T08:30:00Z',
     updatedAt: '2026-09-14T08:30:00Z'
+  }),
+
+  createSeedListing({
+    id: 'list_table_21',
+    sellerId: 'user_kittipong',
+    seller: SEED_USERS[0],
+    title: 'โต๊ะญี่ปุ่นไม้ยางพาราพับเก็บได้ สภาพ 95% โครงสร้างแน่น เหมาะนั่งทำงานหรือทานอาหาร',
+    description: 'โต๊ะพับไม้ยางพาราแท้ ผิวไม้เรียบ ขาโต๊ะพับได้แข็งแรง ไม่โยกเยก ขนาด 60x60x30 ซม. ประหยัดพื้นที่ เหมาะสำหรับคอนโดหรือหอพักนักศึกษา',
+    category: 'furniture_home',
+    transactionType: 'sell',
+    price: 150,
+    originalPrice: 690,
+    conditionGrade: 'like_new',
+    conditionPercentage: 95,
+    conditionLabel: 'สภาพ 95% ผิวเนียน ขาพับแน่น',
+    quantity: 1,
+    unit: 'ตัว',
+    images: [TABLE_IMAGE],
+    location: {
+      district: 'คลองเตย',
+      province: 'กรุงเทพมหานคร',
+      distanceKm: 2.1,
+      radiusKm: 15,
+      coverageArea: 'นัดรับสุขุมวิท พระราม 4 หรือจัดส่งรถร่วม'
+    },
+    deliveryOptions: ['pickup', 'local_courier'],
+    status: 'active',
+    matchExplanation: {
+      reasons: [
+        'โต๊ะไม้แท้คุณภาพดี ราคาประหยัดเพียง 150 บาท',
+        'พับเก็บง่าย ช่วยจัดระเบียบพื้นที่ในห้องขนาดเล็ก',
+        'สภาพเหมือนใหม่ ไร้รอยขีดข่วนลึก',
+        'ผู้ขายตอบไว 98% นัดรับสะดวก'
+      ],
+      compatibilityScore: 95,
+      categoryMatch: true,
+      distanceKm: 2.1,
+      budgetMatch: true,
+      verifiedSeller: true
+    },
+    views: 185,
+    saves: 42,
+    interestedCount: 11,
+    createdAt: '2026-09-13T10:00:00Z',
+    updatedAt: '2026-09-13T10:00:00Z'
+  }),
+
+  createSeedListing({
+    id: 'list_keyboard_22',
+    sellerId: 'user_somchai',
+    seller: SEED_USERS[3],
+    title: 'ชุดคีย์บอร์ดและเมาส์ไร้สาย USB ไร้เสียงคลิก สภาพดีพร้อมถ่านใช้งานได้ทันที',
+    description: 'ชุดเมาส์และคีย์บอร์ดไร้สายระบบ 2.4GHz สภาพ 92% ปุ่มกดนุ่มมือ ไร้เสียงรบกวน เหมาะสำหรับทำงาน WFH หรือใช้กับสมาร์ตทีฟี ทดสอบการพิมพ์ทุกปุ่มทำงานปกติ 100%',
+    category: 'electronics',
+    transactionType: 'sell',
+    price: 190,
+    originalPrice: 850,
+    conditionGrade: 'good',
+    conditionPercentage: 92,
+    conditionLabel: 'สภาพ 92% ทำงานปกติ ไร้เสียงคลิก',
+    quantity: 1,
+    unit: 'ชุด',
+    images: [KEYBOARD_IMAGE],
+    location: {
+      district: 'บางกอกน้อย',
+      province: 'กรุงเทพมหานคร',
+      distanceKm: 5.4,
+      radiusKm: 20,
+      coverageArea: 'นัดรับศิริราช ปิ่นเกล้า หรือจัดส่งพัสดุด่วน'
+    },
+    deliveryOptions: ['pickup', 'local_courier'],
+    status: 'active',
+    matchExplanation: {
+      reasons: [
+        'อุปกรณ์คอมพิวเตอร์หมุนเวียน ประหยัดงบกว่า 75%',
+        'ผ่านการทดสอบระบบเชื่อมต่อสัญญาณเสถียร',
+        'ลดขยะอิเล็กทรอนิกส์ (E-Waste)',
+        'ผู้ขายมีประวัติการส่งมอบสมบูรณ์'
+      ],
+      compatibilityScore: 94,
+      categoryMatch: true,
+      distanceKm: 5.4,
+      budgetMatch: true,
+      verifiedSeller: true
+    },
+    views: 220,
+    saves: 50,
+    interestedCount: 14,
+    createdAt: '2026-09-12T14:30:00Z',
+    updatedAt: '2026-09-12T14:30:00Z'
+  }),
+
+  createSeedListing({
+    id: 'list_study_books_23',
+    sellerId: 'user_mirror_fdn',
+    seller: SEED_USERS[2],
+    title: 'ชุดตำราเรียนภาษาอังกฤษ วิทยาศาสตร์ ม.ปลาย พร้อมสมุดจดสรุปเนื้อหา (6 เล่ม)',
+    description: 'หนังสือเรียนและคู่มือเตรียมสอบเข้ามหาวิทยาลัย สภาพดี สะอาด มีไฮไลท์เฉพาะใจความสำคัญ เหมาะสำหรับนักเรียนที่ต้องการทบทวนเนื้อหาโดยไม่ต้องซื้อหนังสือใหม่ราคาแพง',
+    category: 'used_school_materials',
+    transactionType: 'sell',
+    price: 80,
+    originalPrice: 780,
+    conditionGrade: 'good',
+    conditionPercentage: 88,
+    conditionLabel: 'สภาพ 88% กระดาษไม่ขาด มีไฮไลท์',
+    quantity: 6,
+    unit: 'เล่ม',
+    images: [SCHOOL_MATERIALS_IMAGE],
+    location: {
+      district: 'พญาไท',
+      province: 'กรุงเทพมหานคร',
+      distanceKm: 3.5,
+      radiusKm: 15,
+      coverageArea: 'นัดรับ BTS อารีย์/สะพานควาย หรือส่งพัสดุ'
+    },
+    deliveryOptions: ['pickup', 'local_courier'],
+    status: 'active',
+    matchExplanation: {
+      reasons: [
+        'ส่งต่อความรู้ในราคาประหยัด เฉลี่ยเพียงเล่มละ 13 บาท',
+        'ช่วยเหลือนักเรียนลดภาระค่าใช้จ่ายทางการศึกษา',
+        'หมุนเวียนกระดาษและทรัพยากรการเรียนรู้',
+        'มูลนิธิส่งเสริมการศึกษาชุมชน'
+      ],
+      compatibilityScore: 97,
+      categoryMatch: true,
+      distanceKm: 3.5,
+      budgetMatch: true,
+      verifiedSeller: true
+    },
+    views: 310,
+    saves: 75,
+    interestedCount: 20,
+    createdAt: '2026-09-11T09:15:00Z',
+    updatedAt: '2026-09-11T09:15:00Z'
+  }),
+
+  createSeedListing({
+    id: 'list_baby_stroller_24',
+    sellerId: 'user_kittipong',
+    seller: SEED_USERS[0],
+    title: 'รถเข็นเด็กพับได้น้ำหนักเบา โครงอะลูมิเนียมแข็งแรง พับขึ้นเครื่องบินหรือใส่ท้ายรถได้',
+    description: 'รถเข็นเด็กสภาพดีมาก ใช้งานน้อย ผ้าเบาะซักทำความสะอาดและอบฆ่าเชื้อแล้ว พับเก็บได้ด้วยมือเดียว ล้อหมุนลื่น ล็อกล้อได้แน่นหนา เหมาะสำหรับน้องแรกเกิด - 3 ขวบ',
+    category: 'baby_kids',
+    transactionType: 'sell',
+    price: 350,
+    originalPrice: 2400,
+    conditionGrade: 'good',
+    conditionPercentage: 89,
+    conditionLabel: 'สภาพ 89% ซักอบสะอาด ล้อหมุนลื่น',
+    quantity: 1,
+    unit: 'คัน',
+    images: [STROLLER_IMAGE],
+    location: {
+      district: 'วัฒนา',
+      province: 'กรุงเทพมหานคร',
+      distanceKm: 2.8,
+      radiusKm: 20,
+      coverageArea: 'นัดรับเอกมัย-ทองหล่อ หรือจัดส่งแมสเซนเจอร์'
+    },
+    deliveryOptions: ['pickup', 'local_courier'],
+    status: 'active',
+    matchExplanation: {
+      reasons: [
+        'ของใช้เด็กคุณภาพดี ราคาประหยัดกว่าของใหม่กว่า 80%',
+        'ผ่านการทำความสะอาดและตรวจสอบระบบเบรกล้อปลอดภัย',
+        'ของใช้เด็กโตไว ส่งต่อเพื่อลดขยะและภาระผู้ปกครอง',
+        'ผู้ขายเชื่อถือได้ คะแนนรีวิว 4.95'
+      ],
+      compatibilityScore: 95,
+      categoryMatch: true,
+      distanceKm: 2.8,
+      budgetMatch: true,
+      verifiedSeller: true
+    },
+    views: 410,
+    saves: 88,
+    interestedCount: 22,
+    createdAt: '2026-09-10T11:40:00Z',
+    updatedAt: '2026-09-10T11:40:00Z'
+  }),
+
+  createSeedListing({
+    id: 'list_yoga_mat_25',
+    sellerId: 'user_somchai',
+    seller: SEED_USERS[3],
+    title: 'เสื่อโยคะ TPE กันลื่นหนา 8 มม. นุ่มซัพพอร์ตเข่า พร้อมสายสะพายและเชือกกระโดด',
+    description: 'เสื่อโยคะวัสดุ TPE รักษ์โลก ไม่มีกลิ่นยางฉุน ยึดเกาะพื้นดี ไม่ลื่นแม้มีเหงื่อ เช็ดทำความสะอาดเรียบร้อย มาพร้อมสายสะพายพกพาสะดวก เหมาะสำหรับออกกำลังกายที่บ้าน',
+    category: 'sports_outdoor',
+    transactionType: 'sell',
+    price: 120,
+    originalPrice: 590,
+    conditionGrade: 'good',
+    conditionPercentage: 91,
+    conditionLabel: 'สภาพ 91% เนื้อแน่น ไม่มียุบตัว',
+    quantity: 1,
+    unit: 'ผืน',
+    images: [YOGA_IMAGE],
+    location: {
+      district: 'ดุสิต',
+      province: 'กรุงเทพมหานคร',
+      distanceKm: 4.2,
+      radiusKm: 15,
+      coverageArea: 'นัดรับราชเทวี ดุสิต หรือส่งพัสดุด่วน'
+    },
+    deliveryOptions: ['pickup', 'local_courier'],
+    status: 'active',
+    matchExplanation: {
+      reasons: [
+        'อุปกรณ์ออกกำลังกายสภาพพร้อมใช้ ประหยัดคุ้มค่า',
+        'ทำความสะอาดฆ่าเชื้ออย่างดีก่อนส่งต่อ',
+        'วัสดุ TPE ทนทาน ย่อยสลายได้ทางสิ่งแวดล้อม',
+        'ระยะทางใกล้ 4.2 กม.'
+      ],
+      compatibilityScore: 93,
+      categoryMatch: true,
+      distanceKm: 4.2,
+      budgetMatch: true,
+      verifiedSeller: true
+    },
+    views: 260,
+    saves: 52,
+    interestedCount: 13,
+    createdAt: '2026-09-09T16:20:00Z',
+    updatedAt: '2026-09-09T16:20:00Z'
+  }),
+
+  createSeedListing({
+    id: 'list_vinyl_cassette_26',
+    sellerId: 'user_greencraft',
+    seller: SEED_USERS[1],
+    title: 'แผ่นเสียงไวนิลเพลงแจ๊สคลาสสิกและโปสการ์ดสะสมวินเทจ (3 แผ่น)',
+    description: 'แผ่นเสียงไวนิลสภาพดี แผ่นไม่มีรอยขูดลึก ฟังได้เสียงไม่สะดุด สำหรับนักสะสมเสียงดนตรีอนาล็อกและผู้ที่ชื่นชอบงานตกแต่งสไตล์เรโทร',
+    category: 'hobbies_collectibles',
+    transactionType: 'sell',
+    price: 220,
+    originalPrice: 950,
+    conditionGrade: 'good',
+    conditionPercentage: 88,
+    conditionLabel: 'สภาพ 88% แผ่นเนียน ปกวินเทจ',
+    quantity: 3,
+    unit: 'แผ่น',
+    images: [VINYL_RECORD_IMAGE],
+    location: {
+      district: 'บางซื่อ',
+      province: 'กรุงเทพมหานคร',
+      distanceKm: 6.8,
+      radiusKm: 20,
+      coverageArea: 'นัดรับย่านบางซื่อ หรือจัดส่งใส่กล่องกันกระแทกอย่างดี'
+    },
+    deliveryOptions: ['pickup', 'local_courier'],
+    status: 'active',
+    matchExplanation: {
+      reasons: [
+        'ของสะสมหายาก ราคาเฉลี่ยเพียงแผ่นละ 73 บาท',
+        'ส่งต่อคุณค่าทางดนตรีและศิลปะในชุมชน',
+        'แพ็คบับเบิ้ลกันกระแทกหนาแน่นเพื่อความปลอดภัยของแผ่นเสียง',
+        'สตูดิโอยืนยันตัวตนระดับสตูดิโอออกแบบ'
+      ],
+      compatibilityScore: 92,
+      categoryMatch: true,
+      distanceKm: 6.8,
+      budgetMatch: true,
+      verifiedSeller: true
+    },
+    views: 340,
+    saves: 72,
+    interestedCount: 17,
+    createdAt: '2026-09-08T13:10:00Z',
+    updatedAt: '2026-09-08T13:10:00Z'
+  }),
+
+  createSeedListing({
+    id: 'list_helmet_27',
+    sellerId: 'user_somchai',
+    seller: SEED_USERS[3],
+    title: 'หมวกกันน็อกมอเตอร์ไซค์ครึ่งใบมาตรฐาน มอก. สภาพ 93% ชิลด์หน้าใสไร้รอย',
+    description: 'หมวกกันน็อกสีดำด้าน มาตรฐานความปลอดภัย มอก. สายรัดคางล็อกแน่น ฟองน้ำด้านในยังแน่น ไม่ยุบตัว ถอดทำความสะอาดเรียบร้อยแล้ว ปลอดภัยพร้อมใช้งานทันที',
+    category: 'automotive',
+    transactionType: 'sell',
+    price: 240,
+    originalPrice: 790,
+    conditionGrade: 'good',
+    conditionPercentage: 93,
+    conditionLabel: 'สภาพ 93% ชิลด์ใส ไร้รอยตกกระแทก',
+    quantity: 1,
+    unit: 'ใบ',
+    images: [HELMET_IMAGE],
+    location: {
+      district: 'ธนบุรี',
+      province: 'กรุงเทพมหานคร',
+      distanceKm: 7.2,
+      radiusKm: 20,
+      coverageArea: 'นัดรับวงเวียนใหญ่ ท่าพระ หรือส่งพัสดุด่วน'
+    },
+    deliveryOptions: ['pickup', 'local_courier'],
+    status: 'active',
+    matchExplanation: {
+      reasons: [
+        'หมวกกันน็อกผ่านมาตรฐานความปลอดภัย มอก.',
+        'ประหยัดกว่าของใหม่ถึง 70% ปลอดภัยพร้อมใช้',
+        'ซักโฟมด้านในสะอาด ปราศจากกลิ่นอับ',
+        'ผู้ขายตอบข้อความรวดเร็ว'
+      ],
+      compatibilityScore: 94,
+      categoryMatch: true,
+      distanceKm: 7.2,
+      budgetMatch: true,
+      verifiedSeller: true
+    },
+    views: 290,
+    saves: 58,
+    interestedCount: 15,
+    createdAt: '2026-09-07T15:45:00Z',
+    updatedAt: '2026-09-07T15:45:00Z'
+  }),
+
+  createSeedListing({
+    id: 'list_ceramic_dishes_28',
+    sellerId: 'user_greencraft',
+    seller: SEED_USERS[1],
+    title: 'เซ็ตจานชามเซรามิกสไตล์ญี่ปุ่นสีเอิร์ธโทน 6 ชิ้น ล้างสะอาด ไร้รอยบิ่น',
+    description: 'ชุดจานเซรามิกเคลือบเงาโทนธรรมชาติ ประกอบด้วยจานก้นลึก 3 ใบ และชามซุป 3 ใบ ทนความร้อนสูง สามารถเข้าไมโครเวฟและเครื่องล้างจานได้ ปลอดภัยต่ออาหาร 100%',
+    category: 'household_items',
+    transactionType: 'sell',
+    price: 140,
+    originalPrice: 650,
+    conditionGrade: 'like_new',
+    conditionPercentage: 96,
+    conditionLabel: 'สภาพ 96% ไร้รอยบิ่น เข้าเวฟได้',
+    quantity: 6,
+    unit: 'ชิ้น',
+    images: [CERAMIC_DISHES_IMAGE],
+    location: {
+      district: 'บางซื่อ',
+      province: 'กรุงเทพมหานคร',
+      distanceKm: 5.0,
+      radiusKm: 15,
+      coverageArea: 'นัดรับย่านประชาชื่น หรือส่งพัสดุกันกระแทกหนาแน่น'
+    },
+    deliveryOptions: ['pickup', 'local_courier'],
+    status: 'active',
+    matchExplanation: {
+      reasons: [
+        'เครื่องใช้บนโต๊ะอาหารเซรามิกคุณภาพดี สภาพ 96%',
+        'ราคาเฉลี่ยเพียงชิ้นละ 23 บาท คุ้มค่ามาก',
+        'ทนความร้อน เข้าไมโครเวฟได้ ไร้สารตะกั่ว',
+        'ผู้ขายเป็นสตูดิโอสร้างสรรค์เชื่อถือได้'
+      ],
+      compatibilityScore: 96,
+      categoryMatch: true,
+      distanceKm: 5.0,
+      budgetMatch: true,
+      verifiedSeller: true
+    },
+    views: 320,
+    saves: 68,
+    interestedCount: 19,
+    createdAt: '2026-09-06T11:00:00Z',
+    updatedAt: '2026-09-06T11:00:00Z'
+  }),
+
+  createSeedListing({
+    id: 'list_cardboard_kraft_29',
+    sellerId: 'user_mirror_fdn',
+    seller: SEED_USERS[2],
+    title: 'ม้วนกระดาษคราฟท์รังผึ้งกันกระแทกและกล่องไปรษณีย์ใหม่เบอร์ 0-2 (30 กล่อง)',
+    description: 'กล่องกระดาษพัสดุและกระดาษรังผึ้งทดแทนบับเบิ้ลพลาสติก ย่อยสลายได้ตามธรรมชาติ 100% เหมาะสำหรับพ่อค้าแม่ค้าออนไลน์สายรักษ์โลกที่ต้องการแพ็กพัสดุอย่างปลอดภัยและใส่ใจสิ่งแวดล้อม',
+    category: 'paper_cardboard',
+    transactionType: 'sell',
+    price: 70,
+    originalPrice: 320,
+    conditionGrade: 'like_new',
+    conditionPercentage: 98,
+    conditionLabel: 'สภาพ 98% กล่องสะอาด กระดาษใหม่',
+    quantity: 30,
+    unit: 'กล่อง',
+    images: [PAPER_CARDBOARD_IMAGE],
+    location: {
+      district: 'หลักสี่',
+      province: 'กรุงเทพมหานคร',
+      distanceKm: 9.5,
+      radiusKm: 25,
+      coverageArea: 'นัดรับแจ้งวัฒนะ หลักสี่ หรือจัดส่งพัสดุ'
+    },
+    deliveryOptions: ['pickup', 'local_courier'],
+    status: 'active',
+    matchExplanation: {
+      reasons: [
+        'บรรจุภัณฑ์กระดาษรักษ์โลก ลดการสร้างขยะพลาสติก',
+        'ราคายกมัดเพียง 70 บาท ตกกล่องละ 2 บาทกว่า',
+        'สนับสนุนการหมุนเวียนวัสดุบรรจุภัณฑ์ชุมชน',
+        'มูลนิธิกระจกเงาจัดส่งตรง'
+      ],
+      compatibilityScore: 95,
+      categoryMatch: true,
+      distanceKm: 9.5,
+      budgetMatch: true,
+      verifiedSeller: true
+    },
+    views: 280,
+    saves: 60,
+    interestedCount: 16,
+    createdAt: '2026-09-05T14:15:00Z',
+    updatedAt: '2026-09-05T14:15:00Z'
+  }),
+
+  createSeedListing({
+    id: 'list_indoor_plants_30',
+    sellerId: 'user_greencraft',
+    seller: SEED_USERS[1],
+    title: 'ต้นพลูด่างราชินีหินอ่อนและลิ้นมังกรแคระในกระถางดินเผาพร้อมจานรอง (3 กระถาง)',
+    description: 'ไม้ประดับฟอกอากาศ เลี้ยงง่าย แข็งแรง รากเดินเต็มกระถาง ปลูกในดินผสมใบก้ามปูและกากกาแฟอินทรีย์ เหมาะสำหรับวางบนโต๊ะทำงานหรือตกแต่งมุมห้องเพื่อเพิ่มความสดชื่น',
+    category: 'plants_gardening',
+    transactionType: 'sell',
+    price: 90,
+    originalPrice: 350,
+    conditionGrade: 'like_new',
+    conditionPercentage: 95,
+    conditionLabel: 'สภาพ 95% ต้นสมบูรณ์ แข็งแรง',
+    quantity: 3,
+    unit: 'กระถาง',
+    images: [INDOOR_PLANTS_IMAGE],
+    location: {
+      district: 'จตุจักร',
+      province: 'กรุงเทพมหานคร',
+      distanceKm: 4.8,
+      radiusKm: 15,
+      coverageArea: 'นัดรับตลาดต้นไม้จตุจักร หรือส่งแมสเซนเจอร์'
+    },
+    deliveryOptions: ['pickup', 'local_courier'],
+    status: 'active',
+    matchExplanation: {
+      reasons: [
+        'ต้นไม้ฟอกอากาศพร้อมกระถางดินเผา เฉลี่ยกระถางละ 30 บาท',
+        'ปลูกด้วยดินปุ๋ยหมักชีวภาพ ไร้สารเคมีตกค้าง',
+        'ช่วยดูดซับสารพิษและเพิ่มออกซิเจนในห้อง',
+        'ผู้ขายรักธรรมชาติ ให้คำแนะนำการดูแลฟรี'
+      ],
+      compatibilityScore: 98,
+      categoryMatch: true,
+      distanceKm: 4.8,
+      budgetMatch: true,
+      verifiedSeller: true
+    },
+    views: 390,
+    saves: 95,
+    interestedCount: 28,
+    createdAt: '2026-09-04T10:30:00Z',
+    updatedAt: '2026-09-04T10:30:00Z'
   })
 ];
 
@@ -1410,6 +1878,132 @@ export const INITIAL_WANTED: WantedItem[] = [
     expirationDate: '26 ต.ค. 2026',
     matchingListingsCount: 3,
     createdAt: '2026-09-18T14:30:00Z'
+  },
+  {
+    id: 'wanted_11',
+    userId: 'user_mirror_fdn',
+    user: SEED_USERS[2],
+    title: 'ตามหาเสื้อผ้าเด็กอ่อนและเสื้อผ้าเด็ก 3-7 ขวบ สภาพสะอาดสำหรับแจกจ่ายศูนย์เด็กอ่อน',
+    category: 'clothing_fashion',
+    quantity: 15,
+    unit: 'ชุด',
+    budget: 200,
+    images: [KIDS_CLOTHES_IMAGE],
+    location: {
+      district: 'หลักสี่',
+      province: 'กรุงเทพมหานคร',
+      maxDistanceKm: 25,
+      coverageArea: 'รับบริจาคหรือรับซื้อราคาย่อมเยาในเขตกรุงเทพฯ และนนทบุรี'
+    },
+    description: 'มูลนิธิเปิดรับเสื้อผ้าเด็กอ่อนและเด็กปฐมวัย สภาพสะอาด ไม่มีรอยเปื้อนฝังลึก เพื่อนำไปส่งมอบให้คุณแม่เลี้ยงเดี่ยวในชุมชนเปราะบาง',
+    expirationDate: '29 ต.ค. 2026',
+    matchingListingsCount: 4,
+    createdAt: '2026-09-17T11:00:00Z'
+  },
+  {
+    id: 'wanted_12',
+    userId: 'user_somchai',
+    user: SEED_USERS[3],
+    title: 'ตามหากระทะ หม้อต้มสแตนเลส หรือจานชามเซรามิก สำหรับโครงการครัวปันอิ่มชุมชน',
+    category: 'household_items',
+    quantity: 8,
+    unit: 'ชิ้น',
+    budget: 180,
+    images: [CERAMIC_DISHES_IMAGE],
+    location: {
+      district: 'บางกอกน้อย',
+      province: 'กรุงเทพมหานคร',
+      maxDistanceKm: 20,
+      coverageArea: 'สะดวกรับแถวศิริราช พรานนก หรือปิ่นเกล้า'
+    },
+    description: 'โครงการครัวชุมชนต้องการภาชนะประกอบอาหารและจานชามสแตนเลส/เซรามิกสภาพดี เพื่อใช้ทำอาหารแจกผู้สูงอายุในชุมชน',
+    expirationDate: '27 ต.ค. 2026',
+    matchingListingsCount: 5,
+    createdAt: '2026-09-16T15:30:00Z'
+  },
+  {
+    id: 'wanted_13',
+    userId: 'user_kittipong',
+    user: SEED_USERS[0],
+    title: 'ตามหาของเล่นไม้เสริมทักษะ Montessori บล็อกต่อไม้ หรือจิ๊กซอว์เด็กเล็ก',
+    category: 'baby_kids',
+    quantity: 3,
+    unit: 'ชุด',
+    budget: 250,
+    images: [KIDS_TOYS_IMAGE],
+    location: {
+      district: 'คลองเตย',
+      province: 'กรุงเทพมหานคร',
+      maxDistanceKm: 15,
+      coverageArea: 'นัดรับสุขุมวิท อโศก ทองหล่อ หรือจัดส่งพัสดุ'
+    },
+    description: 'ต้องการของเล่นไม้ธรรมชาติ สีปลอดภัย ไร้สารพิษ สำหรับมุมกิจกรรมเด็กในสตูดิโอสร้างสรรค์ สภาพสมบูรณ์ ชิ้นส่วนไม่สูญหาย',
+    expirationDate: '25 ต.ค. 2026',
+    matchingListingsCount: 3,
+    createdAt: '2026-09-15T13:40:00Z'
+  },
+  {
+    id: 'wanted_14',
+    userId: 'user_mirror_fdn',
+    user: SEED_USERS[2],
+    title: 'ตามหาตำราเรียน ม.ปลาย คู่มือเตรียมสอบ และพจนานุกรมไทย-อังกฤษ มือสอง',
+    category: 'used_school_materials',
+    quantity: 10,
+    unit: 'เล่ม',
+    budget: 100,
+    images: [SCHOOL_MATERIALS_IMAGE],
+    location: {
+      district: 'พญาไท',
+      province: 'กรุงเทพมหานคร',
+      maxDistanceKm: 30,
+      coverageArea: 'ยินดีรับของทั้งในกรุงเทพฯ หรือจัดส่งพัสดุเก็บเงินปลายทาง'
+    },
+    description: 'โครงการอ่านสร้างชาติกำลังรวบรวมหนังสือเรียนวิชาฟิสิกส์ เคมี ชีววิทยา และภาษาอังกฤษ สภาพอ่านได้ เพื่อจัดส่งให้โรงเรียนขยายโอกาสในชนบท',
+    expirationDate: '31 ต.ค. 2026',
+    matchingListingsCount: 6,
+    createdAt: '2026-09-14T10:20:00Z'
+  },
+  {
+    id: 'wanted_15',
+    userId: 'user_agri_coop',
+    user: SEED_USERS[4],
+    title: 'ตามหากระถางต้นไม้ดินเผามือสอง และขุยมะพร้าวแห้ง สำหรับโครงการสวนผักคนเมือง',
+    category: 'plants_gardening',
+    quantity: 12,
+    unit: 'ใบ',
+    budget: 120,
+    images: [INDOOR_PLANTS_IMAGE],
+    location: {
+      district: 'บางกะปิ',
+      province: 'กรุงเทพมหานคร',
+      maxDistanceKm: 20,
+      coverageArea: 'นัดรับแถวลาดพร้าว รามคำแหง หรือเกษตร-นวมินทร์'
+    },
+    description: 'มองหากระถางดินเผาขนาด 6-10 นิ้ว สภาพไม่แตกหักร้าว เพื่อนำมาปลูกพืชสมุนไพรและผักสลัดในโครงการแปลงผักดาดฟ้าชุมชน',
+    expirationDate: '23 ต.ค. 2026',
+    matchingListingsCount: 4,
+    createdAt: '2026-09-13T16:00:00Z'
+  },
+  {
+    id: 'wanted_16',
+    userId: 'user_greencraft',
+    user: SEED_USERS[1],
+    title: 'ตามหากล่องพัสดุไปรษณีย์ใช้แล้วสภาพสะอาด และบับเบิ้ลกันกระแทกเหลือใช้',
+    category: 'packaging_materials',
+    quantity: 40,
+    unit: 'กล่อง',
+    budget: 60,
+    images: [PAPER_CARDBOARD_IMAGE],
+    location: {
+      district: 'บางซื่อ',
+      province: 'กรุงเทพมหานคร',
+      maxDistanceKm: 20,
+      coverageArea: 'สามารถแวะไปรับของตามแนวสถานี MRT ได้'
+    },
+    description: 'ต้องการกล่องพัสดุสภาพแห้งสะอาด ไร้คราบน้ำมัน หรือกันกระแทกเหลือจากการสั่งของออนไลน์ เพื่อนำกลับมาใช้ซ้ำ (Reuse) หมุนเวียนลดขยะ',
+    expirationDate: '28 ต.ค. 2026',
+    matchingListingsCount: 5,
+    createdAt: '2026-09-12T08:30:00Z'
   }
 ];
 
@@ -1513,7 +2107,8 @@ export const INITIAL_DEALS: Deal[] = [
       meetingLocation: 'K-Studio Design ซอยสุขุมวิท 26 คลองเตย กรุงเทพฯ',
       safeZoneName: 'Community Exchange Point - Sukhumvit Hub',
       safetyChecklistAgreed: true,
-      confirmationCode: 'WM-8492'
+      confirmationCode: 'WM-8492',
+      codeUsed: false
     },
     buyerConfirmed: true,
     sellerConfirmed: true,
@@ -1521,6 +2116,69 @@ export const INITIAL_DEALS: Deal[] = [
     hasSellerReviewed: false,
     createdAt: '2026-09-28T11:00:00Z',
     updatedAt: '2026-09-28T11:30:00Z'
+  },
+  {
+    id: 'deal_02',
+    matchId: 'match_02',
+    listingId: 'list_wood_02',
+    listing: INITIAL_LISTINGS[1],
+    buyerId: 'user_somchai',
+    sellerId: 'user_greencraft',
+    buyer: SEED_USERS[3],
+    seller: SEED_USERS[1],
+    agreedPrice: 0,
+    commissionFee: 0,
+    sellerPayout: 0,
+    transactionType: 'swap',
+    deliveryMethod: 'pickup',
+    status: 'completed',
+    handover: {
+      scheduledDate: '2026-09-25',
+      scheduledTime: '11:00',
+      meetingLocation: 'สตูดิโอบางซื่อ ซอยประชาราษฎร์ สาย 1 กรุงเทพฯ',
+      safeZoneName: 'Safe Point Bang Sue Hub',
+      safetyChecklistAgreed: true,
+      confirmationCode: 'WM-3194',
+      codeUsed: true,
+      handoverTime: '2026-09-25T11:22:15Z'
+    },
+    buyerConfirmed: true,
+    sellerConfirmed: true,
+    hasBuyerReviewed: true,
+    hasSellerReviewed: true,
+    createdAt: '2026-09-24T09:00:00Z',
+    updatedAt: '2026-09-25T11:22:15Z'
+  },
+  {
+    id: 'deal_03',
+    matchId: 'match_03',
+    listingId: 'list_boxes_07',
+    listing: INITIAL_LISTINGS[6],
+    buyerId: 'user_kittipong',
+    sellerId: 'user_mirror_fdn',
+    buyer: SEED_USERS[0],
+    seller: SEED_USERS[2],
+    agreedPrice: 350,
+    commissionFee: 52.5,
+    sellerPayout: 297.5,
+    transactionType: 'sell',
+    deliveryMethod: 'local_courier',
+    status: 'scheduled',
+    handover: {
+      scheduledDate: '2026-10-03',
+      scheduledTime: '10:00',
+      meetingLocation: 'ศูนย์กระจายสินค้ากระจกเงา หลักสี่',
+      safeZoneName: 'Mirror Foundation Logistics Hub',
+      safetyChecklistAgreed: true,
+      confirmationCode: 'WM-6721',
+      codeUsed: false
+    },
+    buyerConfirmed: true,
+    sellerConfirmed: false,
+    hasBuyerReviewed: false,
+    hasSellerReviewed: false,
+    createdAt: '2026-09-29T14:00:00Z',
+    updatedAt: '2026-09-29T14:30:00Z'
   }
 ];
 
@@ -1556,8 +2214,8 @@ export const INITIAL_NOTIFICATIONS: AppNotification[] = [
     id: 'notif_01',
     userId: 'user_kittipong',
     type: 'match',
-    title: 'มีรายการแมตช์ใหม่!',
-    body: 'คุณสมชาย สนใจเก้าอี้สำนักงาน Ergonomic Mesh Chair ของคุณ',
+    title: 'จับคู่สำเร็จ (Mutual Match)!',
+    body: 'คุณและคุณสมชาย สนใจเก้าอี้สำนักงาน Ergonomic Mesh Chair ตรงกัน',
     referenceId: 'match_01',
     targetTab: 'matches',
     read: false,
@@ -1567,13 +2225,98 @@ export const INITIAL_NOTIFICATIONS: AppNotification[] = [
     id: 'notif_02',
     userId: 'user_kittipong',
     type: 'offer',
-    title: 'ได้รับข้อเสนอใหม่ ฿800',
-    body: 'คุณสมชาย ยื่นข้อเสนอราคาสำหรับเก้าอี้ทำงาน',
+    title: 'ได้รับข้อเสนอใหม่ ฿850',
+    body: 'คุณสมชาย ยื่นข้อเสนอราคาสำหรับเก้าอี้ทำงาน พร้อมนัดรับ',
     referenceId: 'conv_01',
     targetTab: 'chat',
     read: false,
     createdAt: '2026-09-28T10:33:00Z'
+  },
+  {
+    id: 'notif_03',
+    userId: 'user_kittipong',
+    type: 'deal',
+    title: 'สถานะข้อตกลงอัปเดต (#DEAL_01)',
+    body: 'กำหนดนัดหมายส่งมอบวันพรุ่งนี้ 14:00 น. ณ จุดนัดรับสุขุมวิท 26',
+    referenceId: 'deal_01',
+    targetTab: 'deals',
+    read: false,
+    createdAt: '2026-09-28T11:30:00Z'
+  },
+  {
+    id: 'notif_04',
+    userId: 'user_kittipong',
+    type: 'review',
+    title: 'คุณได้รับรีวิว 5 ดาวใหม่!',
+    body: 'GreenCraft Studio ให้คะแนน 5 ดาว: "ตรงเวลามาก วัสดุสภาพตรงปก แนะนำครับ"',
+    referenceId: 'rev_01',
+    targetTab: 'profile',
+    read: true,
+    createdAt: '2026-09-20T15:05:00Z'
+  },
+  {
+    id: 'notif_05',
+    userId: 'user_kittipong',
+    type: 'wanted',
+    title: 'พบประกาศตามหาที่ตรงกับสินค้าของคุณ',
+    body: 'มูลนิธิกระจกเงา กำลังตามหาลังและกล่องพัสดุกระดาษลูกฟูก รัศมีใกล้คุณ',
+    referenceId: 'wanted_03',
+    targetTab: 'wanted',
+    read: true,
+    createdAt: '2026-09-25T09:35:00Z'
+  },
+  {
+    id: 'notif_06',
+    userId: 'user_kittipong',
+    type: 'security',
+    title: 'แจ้งเตือนความปลอดภัยบัญชี',
+    body: 'การเข้าสู่ระบบสำเร็จจากกรุงเทพมหานคร บัญชียืนยันตัวตนระดับบุคคลเรียบร้อย',
+    targetTab: 'profile',
+    read: true,
+    createdAt: '2026-09-28T09:00:00Z'
   }
 ];
 
-export const INITIAL_REPORTS: ReportItem[] = [];
+export const INITIAL_REPORTS: ReportItem[] = [
+  {
+    id: 'rep_01',
+    reporterId: 'user_somchai',
+    reporterName: 'สมชาย พิพัฒน์เจริญ',
+    targetType: 'listing',
+    targetId: 'list_mock_suspicious',
+    targetTitle: 'เศษทองแดงบริสุทธิ์ 500 กก. ราคาถูกผิดปกติ',
+    reason: 'scam',
+    description: 'ผู้ขายเรียกให้โอนเงินมัดจำล่วงหน้า 5,000 บาทผ่านบัญชีบุคคลธรรมดา ปฏิเสธนัดพบที่ Safe Zone',
+    evidence: 'หลักฐานสลิปและบทสนทนาในไลน์ส่วนตัว',
+    status: 'pending',
+    createdAt: '2026-09-29T10:15:00Z'
+  },
+  {
+    id: 'rep_02',
+    reporterId: 'user_greencraft',
+    reporterName: 'GreenCraft Upcycling Studio',
+    targetType: 'user',
+    targetId: 'user_suspicious_02',
+    targetTitle: 'ผู้ใช้บัญชี User_Shadow_99',
+    reason: 'failed_to_attend_meeting',
+    description: 'นัดหมายส่งมอบพาเลทไม้สน ณ จุดนัดรับลาดกระบัง แต่ไม่มาตามนัดและตัดสายติดต่อไม่ได้',
+    status: 'under_review',
+    moderationNote: 'เจ้าหน้าที่กำลังติดต่อคู่กรณีเพื่อขอคำชี้แจง',
+    createdAt: '2026-09-28T16:40:00Z'
+  },
+  {
+    id: 'rep_03',
+    reporterId: 'user_mirror_fdn',
+    reporterName: 'มูลนิธิกระจกเงา',
+    targetType: 'listing',
+    targetId: 'list_mock_prohibited',
+    targetTitle: 'สารเคมีอุตสาหกรรมไม่ระบุชนิดในถัง 200 ลิตร',
+    reason: 'prohibited_items',
+    description: 'ประกาศส่งต่อสารเคมีอันตรายที่เข้าข่ายวัตถุอันตรายประเภท 3 ซึ่งแพลตฟอร์มไม่อนุญาต',
+    status: 'resolved',
+    actionTaken: 'removed_listing',
+    moderationNote: 'ลบประกาศออกจากระบบทันทียึดตามข้อกำหนดสิ่งของต้องห้าม และออกใบเตือนผู้ใช้',
+    resolvedAt: '2026-09-27T14:20:00Z',
+    createdAt: '2026-09-27T12:00:00Z'
+  }
+];

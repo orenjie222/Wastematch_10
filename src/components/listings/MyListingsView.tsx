@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useMarketplace } from '../../context/MarketplaceContext';
 import { Listing, ListingStatus } from '../../types/marketplace';
+import { getCategoryDefaultImage } from '../../data/seedData';
 import { 
   Plus, 
   Eye, 
@@ -115,9 +116,12 @@ export const MyListingsView: React.FC = () => {
                 {/* Image & Status Bar */}
                 <div className="relative aspect-16/10 bg-[#F7F5EF]">
                   <img
-                    src={item.images[0]}
+                    src={item.images[0] || getCategoryDefaultImage(item.category)}
                     alt={item.title}
                     referrerPolicy="no-referrer"
+                    onError={(e) => {
+                      e.currentTarget.src = getCategoryDefaultImage(item.category);
+                    }}
                     className="w-full h-full object-cover"
                   />
                   <div className="absolute top-3 left-3 bg-white/95 backdrop-blur-md px-2.5 py-1 rounded-lg text-xs">

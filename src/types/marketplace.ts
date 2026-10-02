@@ -91,6 +91,7 @@ export interface User {
   id: string;
   name: string;
   organizationName?: string;
+  communityGroup?: string;
   email: string;
   phone?: string;
   avatar: string;
@@ -133,6 +134,7 @@ export interface Listing {
   seller: User;
   title: string;
   description: string;
+  communityGroup?: string;
   category: ListingCategory;
   transactionType: TransactionType;
   price: number;
@@ -174,6 +176,7 @@ export interface WantedItem {
   userId: string;
   user: User;
   title: string;
+  communityGroup?: string;
   category: ListingCategory;
   quantity: number;
   unit: string;
@@ -287,9 +290,14 @@ export interface Deal {
     safeZoneName?: string;
     safetyChecklistAgreed: boolean;
     confirmationCode: string;
+    codeUsed: boolean;
+    handoverTime?: string;
   };
   buyerConfirmed: boolean;
   sellerConfirmed: boolean;
+  cancellationReason?: string;
+  cancelledBy?: string;
+  rescheduledCount?: number;
   hasBuyerReviewed: boolean;
   hasSellerReviewed: boolean;
   createdAt: string;
@@ -309,7 +317,16 @@ export interface Review {
   createdAt: string;
 }
 
-export type NotificationType = 'match' | 'message' | 'offer' | 'deal' | 'wanted' | 'review' | 'system';
+export type NotificationType = 
+  | 'match' 
+  | 'message' 
+  | 'offer' 
+  | 'deal' 
+  | 'wanted' 
+  | 'review' 
+  | 'system'
+  | 'report'
+  | 'security';
 
 export interface AppNotification {
   id: string;
@@ -318,23 +335,72 @@ export interface AppNotification {
   title: string;
   body: string;
   referenceId?: string;
-  targetTab?: 'discover' | 'wanted' | 'matches' | 'chat' | 'deals' | 'listings' | 'profile';
+  targetTab?: 'discover' | 'wanted' | 'matches' | 'chat' | 'deals' | 'listings' | 'profile' | 'dashboard' | 'impact';
   read: boolean;
   createdAt: string;
 }
+
+export type ReportReason = 
+  | 'scam' 
+  | 'inaccurate_info' 
+  | 'spam' 
+  | 'inappropriate_behavior' 
+  | 'prohibited_items' 
+  | 'failed_to_attend_meeting' 
+  | 'other';
+
+export type ModerationAction = 
+  | 'removed_listing' 
+  | 'warning_issued' 
+  | 'account_restricted' 
+  | 'account_suspended' 
+  | 'account_banned' 
+  | 'dismissed';
 
 export interface ReportItem {
   id: string;
   reporterId: string;
   reporterName: string;
-  targetType: 'listing' | 'user';
+  targetType: 'listing' | 'user' | 'message';
   targetId: string;
   targetTitle: string;
-  reason: 'inaccurate_info' | 'prohibited_item' | 'scam_suspicion' | 'unresponsive' | 'harassment' | 'other';
+  reason: ReportReason;
   description: string;
   evidence?: string;
   status: 'pending' | 'under_review' | 'resolved' | 'dismissed';
+  actionTaken?: ModerationAction;
+  moderationNote?: string;
+  resolvedAt?: string;
   createdAt: string;
 }
 
 export type SubscriptionPlan = 'free' | 'starter' | 'pro' | 'enterprise';
+
+export interface PaymentInvoice {
+  id: string;
+  invoiceNumber: string;
+  date: string;
+  amount: number;
+  plan: SubscriptionPlan;
+  planName: string;
+  paymentMethod: string;
+  status: 'paid' | 'pending' | 'refunded';
+}
+
+export interface UserSubscriptionDetails {
+  plan: SubscriptionPlan;
+  status: 'active' | 'cancelled' | 'expired';
+  startDate: string;
+  expirationDate: string;
+  autoRenew: boolean;
+  paymentHistory: PaymentInvoice[];
+}
+
+export interface PlatformAnnouncement {
+  id: string;
+  title: string;
+  content: string;
+  type: 'info' | 'warning' | 'alert' | 'update';
+  active: boolean;
+  createdAt: string;
+}

@@ -23,16 +23,24 @@ import { NotificationsDrawer } from './components/notifications/NotificationsDra
 import { AuthModal } from './components/auth/AuthModal';
 import { OnboardingModal } from './components/onboarding/OnboardingModal';
 import { SellerProfileModal } from './components/profile/SellerProfileModal';
+import { ImageEditorModal } from './components/common/ImageEditorModal';
 
 const AppContent: React.FC = () => {
-  const { activeTab, isAdminMode, viewingSeller, setViewingSeller } = useMarketplace();
+  const { 
+    activeTab, 
+    isAdminMode, 
+    viewingSeller, 
+    setViewingSeller,
+    imageEditorState,
+    closeImageEditor
+  } = useMarketplace();
 
   if (isAdminMode) {
     return <AdminDashboard />;
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#F7F5EF] text-[#1C211F]">
+    <div className="min-h-screen flex flex-col bg-[#F7F5F0] text-[#252722]">
       
       {/* Top Bar Navigation */}
       <Navbar />
@@ -62,6 +70,17 @@ const AppContent: React.FC = () => {
       <NotificationsDrawer />
       <AuthModal />
       <OnboardingModal />
+
+      {/* Image Editor / Image Changer Modal */}
+      {imageEditorState && imageEditorState.isOpen && (
+        <ImageEditorModal
+          isOpen={imageEditorState.isOpen}
+          onClose={closeImageEditor}
+          currentImage={imageEditorState.currentImage}
+          title={imageEditorState.title}
+          onSave={imageEditorState.onSave}
+        />
+      )}
 
       {/* Seller Profile Modal */}
       {viewingSeller && (

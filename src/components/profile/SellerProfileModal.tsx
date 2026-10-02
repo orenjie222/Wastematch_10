@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useMarketplace } from '../../context/MarketplaceContext';
 import { User, Listing } from '../../types/marketplace';
+import { getCategoryDefaultImage } from '../../data/seedData';
 import { 
   X, 
   MapPin, 
@@ -234,9 +235,12 @@ export const SellerProfileModal: React.FC<SellerProfileModalProps> = ({ seller, 
                       className="p-3 bg-white border border-[#1C211F]/10 rounded-xl hover:border-[#164C3A] transition-all cursor-pointer flex gap-3 group"
                     >
                       <img
-                        src={listing.images[0]}
+                        src={listing.images[0] || getCategoryDefaultImage(listing.category)}
                         alt={listing.title}
                         referrerPolicy="no-referrer"
+                        onError={(e) => {
+                          e.currentTarget.src = getCategoryDefaultImage(listing.category);
+                        }}
                         className="w-20 h-20 rounded-lg object-cover bg-[#F7F5EF] shrink-0"
                       />
                       <div className="flex-1 min-w-0 flex flex-col justify-between">

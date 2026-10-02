@@ -17,7 +17,9 @@ import {
   Coins,
   Navigation,
   Compass,
-  ImageIcon
+  ImageIcon,
+  Edit3,
+  Users
 } from 'lucide-react';
 
 export const WantedView: React.FC = () => {
@@ -25,7 +27,9 @@ export const WantedView: React.FC = () => {
     wantedItems, 
     createWantedItem, 
     setActiveTab, 
-    currentUser 
+    currentUser,
+    openImageEditor,
+    updateWantedItemImage
   } = useMarketplace();
 
   const [searchQuery, setSearchQuery] = useState('');
@@ -120,8 +124,8 @@ export const WantedView: React.FC = () => {
       </div>
 
       {/* Filter & Search Bar */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6">
-        <div className="relative w-full sm:w-80">
+      <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-3 mb-4">
+        <div className="relative w-full lg:w-72">
           <input
             type="text"
             placeholder="ค้นหาประกาศตามหา..."
@@ -131,9 +135,25 @@ export const WantedView: React.FC = () => {
           />
         </div>
 
-        <div className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
+        <div className="flex flex-wrap sm:flex-nowrap items-center gap-2.5 w-full lg:w-auto">
+          {/* Category Filter */}
+          <div className="w-full sm:w-52">
+            <select
+              value={selectedCategory}
+              onChange={(e) => setSelectedCategory(e.target.value)}
+              className="w-full px-3 py-2 bg-white text-xs text-[#1C211F] border border-[#1C211F]/15 rounded-xl focus:outline-none focus:border-[#164C3A]"
+            >
+              <option value="all">ทุกหมวดหมู่ (24+ หมวด)</option>
+              {CATEGORY_DEFINITIONS.map(c => (
+                <option key={c.id} value={c.id}>
+                  {c.nameTh}
+                </option>
+              ))}
+            </select>
+          </div>
+
           {/* Distance Filter */}
-          <div className="w-full sm:w-48">
+          <div className="w-full sm:w-44">
             <select
               value={filterDistanceKm}
               onChange={(e) => setFilterDistanceKm(Number(e.target.value))}
@@ -149,7 +169,7 @@ export const WantedView: React.FC = () => {
           </div>
 
           {/* Province Filter */}
-          <div className="w-full sm:w-56">
+          <div className="w-full sm:w-48">
             <select
               value={selectedProvince}
               onChange={(e) => setSelectedProvince(e.target.value)}
@@ -163,7 +183,58 @@ export const WantedView: React.FC = () => {
               ))}
             </select>
           </div>
+
+          {(selectedCategory !== 'all' || selectedProvince !== 'all' || filterDistanceKm > 0 || searchQuery.trim()) && (
+            <button
+              onClick={() => {
+                setSelectedCategory('all');
+                setSelectedProvince('all');
+                setFilterDistanceKm(0);
+                setSearchQuery('');
+              }}
+              className="px-3 py-2 bg-[#F7F5EF] hover:bg-slate-200 text-[#1C211F] text-xs font-semibold rounded-xl transition-colors cursor-pointer shrink-0"
+            >
+              ล้างตัวกรอง
+            </button>
+          )}
         </div>
+      </div>
+
+      {/* Quick Category Badges Carousel */}
+      <div className="flex items-center gap-1.5 overflow-x-auto pb-3 mb-5 no-scrollbar">
+        <button
+          onClick={() => setSelectedCategory('all')}
+          className={`px-3 py-1 rounded-lg text-xs font-medium whitespace-nowrap transition-colors cursor-pointer ${
+            selectedCategory === 'all'
+              ? 'bg-[#164C3A] text-white shadow-2xs'
+              : 'bg-white border border-[#1C211F]/10 text-[#1C211F]/70 hover:bg-[#F7F5EF]'
+          }`}
+        >
+          ทั้งหมด ({wantedItems.length})
+        </button>
+        {CATEGORY_DEFINITIONS.map(c => {
+          const count = wantedItems.filter(w => w.category === c.id).length;
+          return (
+            <button
+              key={c.id}
+              onClick={() => setSelectedCategory(c.id)}
+              className={`px-3 py-1 rounded-lg text-xs font-medium whitespace-nowrap transition-colors cursor-pointer flex items-center gap-1.5 ${
+                selectedCategory === c.id
+                  ? 'bg-[#164C3A] text-white shadow-2xs'
+                  : 'bg-white border border-[#1C211F]/10 text-[#1C211F]/70 hover:bg-[#F7F5EF]'
+              }`}
+            >
+              <span>{c.nameTh}</span>
+              {count > 0 && (
+                <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${
+                  selectedCategory === c.id ? 'bg-white/20 text-white' : 'bg-[#DCE9E2] text-[#164C3A]'
+                }`}>
+                  {count}
+                </span>
+              )}
+            </button>
+          );
+        })}
       </div>
 
       {/* Grid of Wanted Cards */}
@@ -181,7 +252,7 @@ export const WantedView: React.FC = () => {
               >
                 <div>
                   {/* Photo Header Container */}
-                  <div className="relative aspect-16/10 bg-[#F7F5EF] overflow-hidden">
+                  <div className="relative aspect-16/10 bg-[#F7F5EF] overflow-hidden group/img">
                     <img
                       src={itemImage}
                       alt={item.title}
@@ -191,6 +262,24 @@ export const WantedView: React.FC = () => {
                       }}
                       className="w-full h-full object-cover group-hover:scale-103 transition-transform duration-300"
                     />
+
+                    {/* Quick Photo Editor Trigger */}
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        openImageEditor({
+                          title: `แก้ไขรูปภาพประกาศตามหา: ${item.title}`,
+                          currentImage: itemImage,
+                          onSave: (newUrl) => updateWantedItemImage(item.id, newUrl)
+                        });
+                      }}
+                      className="absolute top-2.5 right-2.5 p-1.5 bg-[#252722]/80 hover:bg-[#344634] text-white rounded-lg text-[10px] font-semibold flex items-center gap-1 shadow-md backdrop-blur-xs transition-all cursor-pointer z-10 opacity-90 hover:opacity-100"
+                      title="แก้ไข/เปลี่ยนรูปภาพนี้"
+                    >
+                      <Edit3 className="w-3 h-3" />
+                      <span>เปลี่ยนรูป</span>
+                    </button>
 
                     {/* Top Left Badges */}
                     <div className="absolute top-2.5 left-2.5 flex items-center gap-1.5">
@@ -202,22 +291,14 @@ export const WantedView: React.FC = () => {
                       </span>
                     </div>
 
-                    {/* Top Right Budget Tag */}
-                    <div className="absolute top-2.5 right-2.5">
-                      <span className="text-[11px] font-bold px-2.5 py-1 rounded-lg bg-white/95 text-[#164C3A] shadow-xs backdrop-blur-xs">
-                        {item.budget > 0 ? `งบ ฿${item.budget.toLocaleString()}` : 'ขอรับฟรี/แลกเปลี่ยน'}
-                      </span>
-                    </div>
-
-                    {/* Bottom overlay with location */}
+                    {/* Bottom overlay with location and budget */}
                     <div className="absolute bottom-2.5 left-2.5 right-2.5 flex items-center justify-between text-[11px] font-medium text-white px-2.5 py-1 rounded-md bg-[#1C211F]/75 backdrop-blur-xs">
-                      <span className="flex items-center gap-1 truncate max-w-[65%]">
+                      <span className="flex items-center gap-1 truncate max-w-[55%]">
                         <MapPin className="w-3 h-3 text-emerald-400 shrink-0" />
                         <span className="truncate">{item.location.province} ({item.location.district})</span>
                       </span>
-                      <span className="flex items-center gap-1 font-bold text-emerald-300 shrink-0">
-                        <Navigation className="w-3 h-3" />
-                        <span>{item.location.maxDistanceKm ? `≤ ${item.location.maxDistanceKm} กม.` : 'ทั่วไทย'}</span>
+                      <span className="font-bold text-emerald-300 shrink-0">
+                        {item.budget > 0 ? `งบ ฿${item.budget.toLocaleString()}` : 'ขอรับฟรี/แลก'}
                       </span>
                     </div>
                   </div>
@@ -473,16 +554,15 @@ export const WantedView: React.FC = () => {
               </div>
 
               {/* Reference Image or Category Photo */}
-              <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-[#1C211F] flex items-center justify-between">
+              <div className="space-y-2 p-3 bg-[#F7F5EF] rounded-xl border border-[#1C211F]/10">
+                <label className="text-xs font-bold text-[#1C211F] flex items-center justify-between">
                   <span className="flex items-center gap-1.5">
                     <ImageIcon className="w-3.5 h-3.5 text-[#164C3A]" />
-                    <span>รูปภาพตัวอย่างสิ่งที่ตามหา (ใส่ URL หรือใช้รูปหมวดหมู่อัตโนมัติ)</span>
+                    <span>รูปภาพตัวอย่างสิ่งที่ตามหา (อัปโหลด หรือใส่ URL)</span>
                   </span>
-                  <span className="text-[10px] text-[#164C3A] font-normal">รูปหมวดหมู่อัตโนมัติ</span>
                 </label>
                 <div className="flex gap-3 items-center">
-                  <div className="w-14 h-14 rounded-xl overflow-hidden bg-[#F7F5EF] border border-[#1C211F]/10 shrink-0">
+                  <div className="w-14 h-14 rounded-xl overflow-hidden bg-white border border-[#1C211F]/10 shrink-0">
                     <img
                       src={newImageUrl.trim() || getCategoryDefaultImage(newCategory)}
                       alt="Preview"
@@ -492,13 +572,40 @@ export const WantedView: React.FC = () => {
                       }}
                     />
                   </div>
-                  <input
-                    type="url"
-                    placeholder="วางลิงก์รูปภาพ (หรือเว้นว่างเพื่อใช้ภาพตามหมวดหมู่อัตโนมัติ)"
-                    value={newImageUrl}
-                    onChange={(e) => setNewImageUrl(e.target.value)}
-                    className="flex-1 px-3 py-2 text-xs border border-[#1C211F]/15 rounded-xl focus:outline-none focus:ring-1 focus:ring-[#164C3A]"
-                  />
+                  <div className="flex-1 space-y-1.5">
+                    <input
+                      type="file"
+                      id="wanted-file-input"
+                      accept="image/png, image/jpeg, image/webp"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          const reader = new FileReader();
+                          reader.onload = (event) => {
+                            if (event.target?.result) {
+                              setNewImageUrl(event.target.result as string);
+                            }
+                          };
+                          reader.readAsDataURL(file);
+                        }
+                      }}
+                      className="hidden"
+                    />
+                    <label
+                      htmlFor="wanted-file-input"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-[#1C211F]/20 hover:border-[#164C3A] rounded-lg text-xs font-semibold text-[#164C3A] cursor-pointer"
+                    >
+                      <span>📁 อัปโหลดรูปภาพจากอุปกรณ์</span>
+                    </label>
+
+                    <input
+                      type="url"
+                      placeholder="หรือวางลิงก์รูปภาพ (Image URL)..."
+                      value={newImageUrl}
+                      onChange={(e) => setNewImageUrl(e.target.value)}
+                      className="w-full px-3 py-1.5 text-xs bg-white border border-[#1C211F]/15 rounded-lg focus:outline-none focus:border-[#164C3A]"
+                    />
+                  </div>
                 </div>
               </div>
 
